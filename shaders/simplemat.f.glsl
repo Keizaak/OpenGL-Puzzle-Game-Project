@@ -50,7 +50,7 @@ out vec4 fragColor;
  */
 vec3 computeLightLambert(const in DirLight light, const in vec3 normal, const in vec3 diffuse)
 {
-  return vec3(0);
+  return light.intensity * diffuse * max(0, dot(light.direction, normal));
 }
 
 /**
@@ -66,7 +66,7 @@ vec3 computeLightLambert(const in DirLight light, const in vec3 normal, const in
  */
 vec3 computeLightSpecular(const in DirLight light, const in vec3 normal, const in vec3 directionToCamera, const in vec3 specular, const in float shininess)
 {
-  return vec3(0);
+  return light.intensity * specular * pow(max(0, dot(normal, directionToCamera)), shininess);
 }
 
 /**
@@ -82,7 +82,11 @@ vec3 computeLightSpecular(const in DirLight light, const in vec3 normal, const i
  */
 vec3 computeMicroNormal(const in vec3 macroNormal, const in vec3 macroTangent, const in vec3 macroBitangent)
 {
-  vec3 microNormal = macroNormal;
+  vec3 colors = texture(material.normalmap, uv).rgb;
+  float alpham = 2 * colors[2] - 1;
+  float alphat = 2 * colors[0] - 1;
+  float alphab = 2 * colors[1] - 1;
+  vec3 microNormal = macroNormal * alpham + macroTangent * alphat + macroBitangent * alphab;
   return microNormal;
 }
 

@@ -508,17 +508,27 @@ private:
  */
 template <typename T> void Buffer::setData(const std::vector<T> & values)
 {
-  FAIL_BECAUSE_INCOMPLETE;
+  bind();
+  glBufferData(m_target, sizeof(T) * values.size(), values.data(), GL_STATIC_DRAW);
+  unbind();
+  m_attributeCount = values.size();
+  m_attributeSize = AttributeProperties<T>::components;
+  m_attributeType = AttributeProperties<T>::typeEnum;
 }
 
 template <typename T> void VAO::setVBO(uint attributeIndex, const std::vector<T> & values)
 {
-  FAIL_BECAUSE_INCOMPLETE;
+  assert(attributeIndex < m_vbos.size());
+  m_vbos[attributeIndex]->setData(values);
+  encapsulateVBO(attributeIndex);
 }
 
 template <typename T> void VAO::setIBO(const std::vector<T> & values)
 {
-  FAIL_BECAUSE_INCOMPLETE;
+  bind();
+  m_ibo.setData(values);
+  m_ibo.bind();
+  unbind();
 }
 
 template <typename T> void Program::setUniform(const std::string & name, const T & val) const

@@ -10,6 +10,7 @@ PA4Application::RenderObject::RenderObject(const std::shared_ptr<Program> & prog
 {
   if (part >= 3) {
     m_colormap = std::unique_ptr<Sampler>(new Sampler(0));
+    m_colormap->setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
   }
 }
 
