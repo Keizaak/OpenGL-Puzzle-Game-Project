@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "utils.hpp"
 
+
 GameApplication::GameApplication(int windowWidth, int windowHeight)
     : Application(windowWidth, windowHeight, "Puzzle Game"),
       m_vao(2), m_program("shaders/game.v.glsl", "shaders/game.f.glsl")

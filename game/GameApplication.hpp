@@ -3,6 +3,7 @@
 
 #include "Application.hpp"
 #include "glApi.hpp"
+#include "./Asset_Designs/simple_shapes.hpp"
 
 struct GLFWwindow;
 
