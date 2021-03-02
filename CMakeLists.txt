@@ -66,10 +66,14 @@ add_executable(glitter
   examples/PA5Application.hpp
   examples/PA5Application.cpp
   ${GLSLFiles}
-        game/main.cpp
+  game/main.cpp
   game/GameApplication.cpp
   )
 target_link_libraries(glitter utils ${GLFW3_LIBRARIES} ${GLEW_LIBRARIES})
+
+add_executable(test
+        game/piece/Piece.cpp
+        game/piece/mainTest.cpp)
 
 # +------------------------------------------------------------------+
 # |  rubik's cube                                                    |
