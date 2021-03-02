@@ -19,6 +19,7 @@ private:
   Program m_program;   ///< A program used in both parts.
 
   void makeA2DCorner();
+  void makeA2DRod();
 };
 
 
