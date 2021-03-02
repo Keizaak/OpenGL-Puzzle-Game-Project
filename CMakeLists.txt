@@ -55,7 +55,6 @@ add_library(utils ${UTILS_SRC})
 file(GLOB GLSLFiles shaders/*.glsl)
 
 add_executable(glitter
-  examples/main.cpp
   examples/PA1Application.hpp
   examples/PA1Application.cpp
   examples/PA2Application.hpp
@@ -67,6 +66,8 @@ add_executable(glitter
   examples/PA5Application.hpp
   examples/PA5Application.cpp
   ${GLSLFiles}
+        game/main.cpp
+  game/GameApplication.cpp
   )
 target_link_libraries(glitter utils ${GLFW3_LIBRARIES} ${GLEW_LIBRARIES})
 

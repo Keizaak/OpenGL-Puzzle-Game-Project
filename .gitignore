@@ -3,7 +3,9 @@
 *~
 *#
 build*/*
+cmake-build-debug*/*
 ext/*
 *.swp
 *.swo
 CMakeLists.txt.user
+.idea*/*
