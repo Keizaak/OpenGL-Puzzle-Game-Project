@@ -30,6 +30,8 @@ SimpleApp::SimpleApp(int windowWidth, int windowHeight)
   glm::vec4 red = {1,0,0,1};
   glm::vec4 blue = {0,0,1,1};
 
+
+
   std::vector<uint> iboCorner = {0, 1, 2,
                            2, 6, 0,
                            3, 4, 5,
@@ -39,30 +41,35 @@ SimpleApp::SimpleApp(int windowWidth, int windowHeight)
   std::vector<uint> iboSmallRod = {0, 1, 2,
                            2, 3, 0};
 
-  makeA2DShape(positionsCorner,yellow,iboCorner);
-  makeA2DShape(positionsRod,red,iboRod);
-  makeA2DShape(positionsSmallRod,blue,iboSmallRod);
+  glm::mat4 model0(1.);
+
+  float angle = 3.14;
+  glm::mat4 model1 = glm::scale(glm::mat4(1.), glm::vec3(1.1, 1.1, 1.1));
+  model1 = glm::rotate(model1, angle, glm::vec3(0, 0, 1));
+
+  makeA2DShape(positionsCorner,yellow,iboCorner,model1);
+  makeA2DShape(positionsRod,red,iboRod,model0);
+  makeA2DShape(positionsSmallRod,blue,iboSmallRod,model0);
 }
 
-void SimpleApp::makeA2DShape(std::vector<glm::vec2> positions, glm::vec4 color, std::vector<uint> ibo)
+void SimpleApp::makeA2DShape(std::vector<glm::vec2> positions, glm::vec4 color, std::vector<uint> ibo, glm::mat4 model)
 {
   std::vector<glm::vec4> colors;
   for(int i=0; i< positions.size(); i++) {
     colors.push_back(color);
   }
 
-  glm::mat4 mw(1);
-
   std::shared_ptr<VAO> vao(new VAO(2));
   vao->setVBO(0,positions);
   vao->setVBO(1,colors);
   vao->setIBO(ibo);
 
-  m_vaos.push_back(RenderObject::createInstance(m_program, vao, mw));
+  m_vaos.push_back(RenderObject::createInstance(m_program, vao, model));
 }
 
 void SimpleApp::renderFrame() {
-  glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT);
+
   for (const auto &vao : m_vaos) {
     vao->draw();
   }
@@ -94,6 +101,10 @@ void SimpleApp::RenderObject::draw(GLenum mode) const {
   if (m_vao and m_prog) {
     m_prog->bind();
     updateProgram();
+    glm::mat4 view(1.);
+    glm::mat4 proj(1.);
+    m_prog->setUniform("V", view);
+    m_prog->setUniform("P", proj);
     m_vao->draw(mode);
     m_prog->unbind();
   }

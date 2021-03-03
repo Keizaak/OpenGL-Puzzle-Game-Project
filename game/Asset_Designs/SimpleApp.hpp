@@ -61,7 +61,7 @@ private:
   std::vector<std::shared_ptr<RenderObject>> m_vaos; ///< List of instanced VAOs (VAO + modelView matrix)
   std::shared_ptr<Program> m_program;                ///< A GLSL progam
 
-  void makeA2DShape(std::vector<glm::vec2>, glm::vec4 , std::vector<uint>);
+  void makeA2DShape(std::vector<glm::vec2>, glm::vec4 , std::vector<uint>,glm::mat4);
 };
 
 #endif // GLITTER_SIMPLEAPP_HPP
