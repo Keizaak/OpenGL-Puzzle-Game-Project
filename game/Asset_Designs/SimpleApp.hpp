@@ -55,14 +55,12 @@ private:
     std::vector<glm::vec2> _positions;
     glm::vec4 _color;
     std::vector<uint> _ibo;
-
-
     };
 
 private:
   std::vector<std::shared_ptr<RenderObject>> m_vaos; ///< List of instanced VAOs (VAO + modelView matrix)
   std::shared_ptr<Program> m_program;                ///< A GLSL progam
-  
+
   void makeA2DShape(std::vector<glm::vec2>, glm::vec4 , std::vector<uint>);
 };
 
