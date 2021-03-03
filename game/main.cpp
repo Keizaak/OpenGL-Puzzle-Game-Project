@@ -12,5 +12,4 @@ int main(int argc, char * argv[]) {
     application->setCallbacks();
     application->mainLoop();
     delete application;
-
 }
