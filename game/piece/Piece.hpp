@@ -53,6 +53,8 @@ inline Direction & operator--(Direction & type, int);
 
 */
 
+void print2dVBO(const std::vector<glm::vec2> &VBO, int sizeOfVec);
+bool isAlreadyIn2dVBO(glm::vec2 point /* @todo RENAME */, const std::vector<glm::vec2>& VBO);
 int generateVAOFromMatrix (/*Piece_Type pieceType*/);
 
 

@@ -1,4 +1,5 @@
 #include "Piece.hpp"
+
 /*
 Piece::Piece(Piece_Type* type)
     : _type(type)
@@ -65,16 +66,16 @@ glm::vec2 Piece::getPosition() {
 }
  */
 
-void printVBO(const std::vector<glm::vec2> &VBO, int sizeOfVec) {
+void print2dVBO(const std::vector<glm::vec2> &VBO, int sizeOfVec) {
   std::cout << "{";
   std::vector<glm::vec2>::size_type j;
   for (auto & i : VBO)
   {
     std::cout << "{";
-    for (j = 0; j < sizeOfVec; j++ )
+    for (j = (std::vector<glm::vec2>::size_type)0; j < (std::vector<glm::vec2>::size_type)sizeOfVec; j++ )
     {
       std::cout << i[j];
-      if(j != sizeOfVec -1) {
+      if(j != (std::vector<glm::vec2>::size_type)sizeOfVec -1) {
         std::cout << ',';
       }
     }
@@ -83,7 +84,7 @@ void printVBO(const std::vector<glm::vec2> &VBO, int sizeOfVec) {
   std::cout << "}" << std::endl;
 }
 
-bool isAlreadyInVBO(glm::vec2 point /* @todo RENAME */, const std::vector<glm::vec2>& VBO, int sizeOfVec) {
+bool isAlreadyIn2dVBO(glm::vec2 point /* @todo RENAME */, const std::vector<glm::vec2>& VBO) {
 
   for (auto & i : VBO)
   {
@@ -94,35 +95,21 @@ bool isAlreadyInVBO(glm::vec2 point /* @todo RENAME */, const std::vector<glm::v
   return false;
 }
 
-int generateVAOFromMatrix (/*Piece_Type pieceType*/)
-{
+int generateVAOFromMatrix (/*Piece_Type pieceType*/) {
   std::string lineBuffer;
   /* @TODO chemin relatif ? */
   std::ifstream file("/home/nathan/CLionProjects/opengl-project-puzzle-game/game/piece/MatrixFile.txt");
   if (!file.is_open()){
     std::cerr << "Error: " << strerror(errno) << std::endl;
   }
-  std::vector<glm::vec2> positionVbo;
+
+  std::vector<glm::vec2> positionVBO;
   std::vector<glm::vec2> tilesOccupied;
+  std::vector<uint> IBO;
+  //VAO vao(2); /* 2 ?? 1 ?? */
 
-  /*
-  positionVBO.emplace_back(glm::vec2(0,0));
-  positionVBO.emplace_back(glm::vec2(0,1));
-  positionVBO.emplace_back(glm::vec2(5,6));
-  printVBO(positionVBO, 2);
-   */
-
-
-
-
-
-  // VAO vao(2); /* 2 ?? 1 ?? */
   int lineNumber = 0;
-  int firstLine = 8; /* @todo à déterminer en fonction de pieceType dans un second temps*/
-
-
-
-
+  int firstLine = 64; /* @todo à déterminer en fonction de pieceType dans un second temps*/
 
   while (lineNumber != firstLine && getline(file, lineBuffer)) {
     std::cout<< "Ligne n°" << lineNumber << " = " << lineBuffer << std::endl;
@@ -132,7 +119,6 @@ int generateVAOFromMatrix (/*Piece_Type pieceType*/)
   if (lineNumber != firstLine) {
     std::cout << "Reading file error" << std::endl;
   }
-  /* en faire une fonction à part ??? */
 
   int minx = 4, maxx = 0, miny = 4, maxy = 0;
 
@@ -175,35 +161,36 @@ int generateVAOFromMatrix (/*Piece_Type pieceType*/)
   int width = maxx - minx + 1;
   std::cout << "height = " << height << std::endl;
   std::cout << "width = " << width << std::endl;
-  int maxInHeightAndWidth = std::max(height,width);
-  std::cout << "min = " << maxInHeightAndWidth << std::endl;
 
-
-  printVBO(tilesOccupied, 2);
+  print2dVBO(tilesOccupied, 2);
 
   glm::vec2 vecToPushBack;
-  /* careful : search columns */
-  for (auto & i : tilesOccupied)
-  {
+  for (auto & i : tilesOccupied) {
     std::cout <<"new tile" << std::endl;
     for (unsigned int deltax = 0; deltax <=1; deltax++) {
 
       for (unsigned int deltay = 0; deltay <=1; deltay++) {
-        /* @todo normalization problem when height != width */
-        vecToPushBack = glm::vec2((i[0] + (float)deltax) *(2.0/maxInHeightAndWidth) - 1, (i[1] + (float)deltay) *(2.0/maxInHeightAndWidth) - 1);
-        if(!isAlreadyInVBO(vecToPushBack, positionVbo, 2)) {
+        if (width > height) {
+          vecToPushBack = glm::vec2(
+              (i[0] + (float)deltax)*(2.0/width) - 1,
+              ((i[1] + (float)deltay)*(2.0/width) - 1  +  (((float)width-(float)height)/(float)width)  )
+              );
+        } else {
+          vecToPushBack = glm::vec2(
+              ((i[0] + (float)deltax)*(2.0/height) - 1  +  (((float)height-(float)width)/(float)height)  ),
+              (i[1] + (float)deltay)*(2.0/height) - 1
+          );
+        }
+
+        if(!isAlreadyIn2dVBO(vecToPushBack, positionVBO)) {
           std::cout<< vecToPushBack[0] << " " << vecToPushBack[1] << std::endl;
-          positionVbo.emplace_back(vecToPushBack);
+          positionVBO.emplace_back(vecToPushBack);
         }
       }
     }
   }
-  printVBO(positionVbo, 2);
-
-
-
-
+  print2dVBO(positionVBO, 2);
   return 0;
 }
 
-  /*----------------------------------*/
+
