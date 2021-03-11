@@ -17,7 +17,8 @@ int main() {
 //    piece.move(RIGHT);
 //    std::cout << piece.getPosition().x << " " << piece.getPosition().y << std::endl;
 
-  /* test getVAOFromMatrix */
-  generateVAOFromMatrix();
+    /* test getVAOFromMatrix */
+    generateVAOFromMatrix(Piece_Type::BIG_L);
+
     return 0;
 }

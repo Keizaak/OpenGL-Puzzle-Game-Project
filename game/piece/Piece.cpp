@@ -1,41 +1,25 @@
 #include "Piece.hpp"
 
-/*
-Piece::Piece(Piece_Type* type)
-    : _type(type)
+Piece::Piece(Piece_Type type)
+    : _type(type), _vao(2)
 {
     _topLeftPosition = glm::vec2(0, 0);
-    _orientation = UP;
+    _angle = 0;
+    //generateVAOFromMatrix(_type);
 }
 
-Piece::Piece(glm::vec2 position, Piece_Type* type, Direction orientation)
-    : _topLeftPosition(position), _type(type), _orientation(orientation)
+Piece::Piece(glm::vec2 position, Piece_Type type, int angle)
+    : _topLeftPosition(position), _type(type), _angle(angle), _vao(2)
 {
-}
-
-inline Direction & operator++(Direction & state, int) {
-    const int i = static_cast<int>(state)+1;
-    state = static_cast<Direction>((i) % 4);
-    return state;
-}
-
-inline Direction & operator--(Direction & type, int) {
-    const int i = static_cast<int>(type)-1;
-
-    if (i < 0) {
-        type = static_cast<Direction>(3);
-    } else {
-        type = static_cast<Direction>((i) % 4);
-    }
-    return type;
+    //generateVAOFromMatrix(_type);
 }
 
 void Piece::clockwiseRotate() {
-    _orientation++;
+    _angle = (_angle + 90) % 360;
 }
 
 void Piece::counterClockwiseRotate() {
-    _orientation--;
+    _angle = (_angle - 90) % 360;
 }
 
 void Piece::move(Direction direction) {
@@ -57,16 +41,35 @@ void Piece::move(Direction direction) {
     }
 }
 
-Direction Piece::getOrientation() {
-    return _orientation;
+int Piece::getAngle() {
+    return _angle;
 }
 
 glm::vec2 Piece::getPosition() {
     return _topLeftPosition;
 }
- */
 
-void print2dVBO(const std::vector<glm::vec2> &VBO, int sizeOfVec) {
+void Piece::setVBO(int index, std::vector<glm::vec2> VBO) {
+    _vao.setVBO(index, VBO);
+}
+
+void Piece::setIBO(std::vector<uint> IBO) {
+    _vao.setIBO(IBO);
+}
+
+void Piece::draw() {
+    _vao.draw();
+}
+
+glm::vec3 generateRandomColor() {
+    glm::vec3 color;
+    for (int i = 0; i < 3; i++) {
+
+    }
+}
+
+
+void Piece::print2dVBO(const std::vector<glm::vec2> &VBO, int sizeOfVec) {
   std::cout << "{";
   std::vector<glm::vec2>::size_type j;
   for (auto & i : VBO)
@@ -84,7 +87,7 @@ void print2dVBO(const std::vector<glm::vec2> &VBO, int sizeOfVec) {
   std::cout << "}" << std::endl;
 }
 
-bool isAlreadyIn2dVBO(glm::vec2 point /* @todo RENAME */, const std::vector<glm::vec2>& VBO) {
+bool Piece::isAlreadyIn2dVBO(glm::vec2 point /* @todo RENAME */, const std::vector<glm::vec2>& VBO) {
 
   for (auto & i : VBO)
   {
@@ -95,10 +98,9 @@ bool isAlreadyIn2dVBO(glm::vec2 point /* @todo RENAME */, const std::vector<glm:
   return false;
 }
 
-int generateVAOFromMatrix (/*Piece_Type pieceType*/) {
+void Piece::generateVAOFromMatrix (Piece_Type pieceType) {
   std::string lineBuffer;
-  /* @TODO chemin relatif ? */
-  std::ifstream file("/home/nathan/CLionProjects/opengl-project-puzzle-game/game/piece/MatrixFile.txt");
+  std::ifstream file("../game/piece/MatrixFile.txt");
   if (!file.is_open()){
     std::cerr << "Error: " << strerror(errno) << std::endl;
   }
@@ -106,10 +108,9 @@ int generateVAOFromMatrix (/*Piece_Type pieceType*/) {
   std::vector<glm::vec2> positionVBO;
   std::vector<glm::vec2> tilesOccupied;
   std::vector<uint> IBO;
-  //VAO vao(2); /* 2 ?? 1 ?? */
 
   int lineNumber = 0;
-  int firstLine = 64; /* @todo à déterminer en fonction de pieceType dans un second temps*/
+  int firstLine = 4 * (int)pieceType;
 
   while (lineNumber != firstLine && getline(file, lineBuffer)) {
     std::cout<< "Ligne n°" << lineNumber << " = " << lineBuffer << std::endl;
@@ -189,8 +190,6 @@ int generateVAOFromMatrix (/*Piece_Type pieceType*/) {
       }
     }
   }
+  _vao.setVBO(0, positionVBO);
   print2dVBO(positionVBO, 2);
-  return 0;
 }
-
-
