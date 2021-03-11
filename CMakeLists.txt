@@ -68,6 +68,10 @@ add_executable(glitter
   ${GLSLFiles}
   game/main.cpp
   game/GameApplication.cpp
+        game/Asset_Designs/SimpleApp.cpp
+        game/Asset_Designs/SimpleApp.hpp
+        game/piece/Piece.cpp
+
   )
 target_link_libraries(glitter utils ${GLFW3_LIBRARIES} ${GLEW_LIBRARIES})
 

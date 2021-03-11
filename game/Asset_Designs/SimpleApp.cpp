@@ -53,13 +53,12 @@ SimpleApp::SimpleApp(int windowWidth, int windowHeight)
 //  model2 = glm::scale(model2, glm::vec3(1.1, 1.1, 1.1));
 
   // Le vecteur de rotation doit se situer sur le centre
-  makeA2DShape(positionsCorner,yellow,iboCorner,model2);
-  makeA2DShape(positionsRod,red,iboRod,model0);
-  makeA2DShape(positionsSmallRod,blue,iboSmallRod,model0);
+//  makeA2DShape(positionsCorner,yellow,iboCorner,model2);
+//  makeA2DShape(positionsRod,red,iboRod,model0);
+//  makeA2DShape(positionsSmallRod,blue,iboSmallRod,model0);
 
-  Piece corner(SQUARE_1X1);
-  corner.setVBO(0,positionsCorner);
-
+  std::shared_ptr<Piece> corner(new Piece(SQUARE_1X1));
+  makeA2DShape(corner,positionsCorner,yellow,model0);
 }
 
 glm::mat4 createRotationAroundAnchor(glm::vec2 anchor, float angle){
@@ -70,28 +69,30 @@ glm::mat4 createRotationAroundAnchor(glm::vec2 anchor, float angle){
   return rotationMatrix;
 }
 
-void SimpleApp::makeA2DShape(std::vector<glm::vec2> positions, glm::vec3 color, std::vector<uint> ibo, glm::mat4 model)
-{
+//void SimpleApp::makeA2DShape(std::vector<glm::vec2> positions, glm::vec3 color, std::vector<uint> ibo, glm::mat4 model)
+//{
+//  std::vector<glm::vec3> colors;
+//  for(int i=0; i< positions.size(); i++) {
+//    colors.push_back(color);
+//  }
+//
+//  std::shared_ptr<VAO> vao(new VAO(2));
+//  vao->setVBO(0,positions);
+//  vao->setVBO(1,colors);
+//  vao->setIBO(ibo);
+//
+//  m_pieces.push_back(RenderObject::createInstance(m_program, vao, model));
+//}
+
+void SimpleApp::makeA2DShape(std::shared_ptr<Piece> piece,  std::vector<glm::vec2> positions, glm::vec3 color, glm::mat4 model){
+  piece->setVBO(0,positions);
+
   std::vector<glm::vec3> colors;
   for(int i=0; i< positions.size(); i++) {
     colors.push_back(color);
   }
 
-  std::shared_ptr<VAO> vao(new VAO(2));
-  vao->setVBO(0,positions);
-  vao->setVBO(1,colors);
-  vao->setIBO(ibo);
-
-//  m_pieces.push_back(RenderObject::createInstance(m_program, vao, model));
-}
-
-void SimpleApp::makeA2DShape(Piece piece, int VBOSize, glm::vec3 color){
-  std::vector<glm::vec3> colors;
-  for(int i=0; i< VBOSize; i++) {
-    colors.push_back(color);
-  }
-
-  piece.setVBO(1,colors);
+  piece->setVBO(1,colors);
 
   m_pieces.push_back(RenderObject::createInstance(m_program, piece, model));
 }
@@ -134,7 +135,7 @@ void SimpleApp::RenderObject::draw(GLenum mode) const {
     glm::mat4 proj(1.);
     m_prog->setUniform("V", view);
     m_prog->setUniform("P", proj);
-    m_piece->draw(mode);
+    m_piece->draw();
     m_prog->unbind();
   }
 }

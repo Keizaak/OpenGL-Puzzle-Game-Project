@@ -58,8 +58,8 @@ void Piece::setIBO(std::vector<uint> IBO) {
     _vao.setIBO(IBO);
 }
 
-void Piece::draw(GLenum mode) {
-    _vao.draw(mode);
+void Piece::draw() {
+    _vao.draw();
 }
 
 glm::vec3 Piece::generateRandomColorVector() {

@@ -36,7 +36,7 @@ enum Direction {
 
 class Piece {
 public:
-  Piece(Piece_Type type);
+    Piece(Piece_Type type);
     Piece(glm::vec2 position, Piece_Type type, int angle);
 
     void clockwiseRotate();
@@ -47,7 +47,7 @@ public:
     glm::vec2 getPosition();
     template<typename T> void setVBO(int index, std::vector<T> VBO);
     void setIBO(std::vector<uint> IBO);
-    void draw(GLenum mode);
+    void draw();
 
 private:
     glm::vec2 _topLeftPosition;
