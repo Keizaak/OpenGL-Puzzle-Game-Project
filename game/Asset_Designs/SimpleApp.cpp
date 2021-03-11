@@ -45,11 +45,25 @@ SimpleApp::SimpleApp(int windowWidth, int windowHeight)
 
   float angle = 3.14;
   glm::mat4 model1 = glm::scale(glm::mat4(1.), glm::vec3(1.1, 1.1, 1.1));
-  model1 = glm::rotate(model1, angle, glm::vec3(0, 0, 1));
+  model1 = glm::translate(model1, glm::vec3(0.5, 0.5, 0));
 
-  makeA2DShape(positionsCorner,yellow,iboCorner,model1);
+  glm::vec2 anchor = positionsSmallRod[0];
+
+  glm::mat4 model2 = createRotationAroundAnchor(anchor,angle);
+//  model2 = glm::scale(model2, glm::vec3(1.1, 1.1, 1.1));
+
+  // Le vecteur de rotation doit se situer sur le centre
+  makeA2DShape(positionsCorner,yellow,iboCorner,model0);
   makeA2DShape(positionsRod,red,iboRod,model0);
   makeA2DShape(positionsSmallRod,blue,iboSmallRod,model0);
+}
+
+glm::mat4 createRotationAroundAnchor(glm::vec2 anchor, float angle){
+  glm::mat4 rotationMatrix = glm::translate(glm::mat4(1.), glm::vec3(anchor, 0));
+  rotationMatrix = glm::rotate(rotationMatrix, angle, glm::vec3(0, 0, 1));
+  rotationMatrix = glm::translate(rotationMatrix, glm::vec3(-anchor, 0));
+
+  return rotationMatrix;
 }
 
 void SimpleApp::makeA2DShape(std::vector<glm::vec2> positions, glm::vec4 color, std::vector<uint> ibo, glm::mat4 model)

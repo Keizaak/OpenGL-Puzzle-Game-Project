@@ -64,4 +64,5 @@ private:
   void makeA2DShape(std::vector<glm::vec2>, glm::vec4 , std::vector<uint>,glm::mat4);
 };
 
+glm::mat4 createRotationAroundAnchor(glm::vec2 anchor, float angle);
 #endif // GLITTER_SIMPLEAPP_HPP
