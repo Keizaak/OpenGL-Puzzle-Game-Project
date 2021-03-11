@@ -48,6 +48,7 @@ public:
     void setPositionVBO(std::vector<glm::vec2> const & VBO);
     void setColorVBO(std::vector<glm::vec3> const & VBO);
     void setIBO(std::vector<uint> IBO);
+    void setTopLeftPosition(glm::vec2 topLeftPosition);
     void draw(GLenum mode);
     void verifVAO();
 
@@ -56,7 +57,12 @@ private:
     Piece_Type _type;
     int _angle;
     VAO _vao;
+    glm::vec2 _transVect;
 
+  public:
+    const glm::vec2 & getTransVect() const;
+    void setTransVect(const glm::vec2 & transVect);
+  private:
     glm::vec3 generateRandomColorVector();
     void print2dVBO(const std::vector<glm::vec2> &VBO, int sizeOfVec);
     void print3dVBO(const std::vector<glm::vec3> &VBO, int sizeOfVec);

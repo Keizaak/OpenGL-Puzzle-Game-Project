@@ -5,12 +5,14 @@ Piece::Piece(Piece_Type type)
 {
     _topLeftPosition = glm::vec2(0, 0);
     _angle = 0;
+    _transVect = glm::vec2(0, 0);
     //generateVAOFromMatrix(_type);
 }
 
 Piece::Piece(glm::vec2 position, Piece_Type type, int angle)
     : _topLeftPosition(position), _type(type), _angle(angle), _vao(2)
 {
+    _transVect = glm::vec2(0, 0);
     //generateVAOFromMatrix(_type);
 }
 
@@ -59,6 +61,10 @@ void Piece::setPositionVBO(std::vector<glm::vec2> const & VBO) {
 
 void Piece::setIBO(std::vector<uint> IBO) {
     _vao.setIBO(IBO);
+}
+
+void Piece::setTopLeftPosition(glm::vec2 topLeftPosition){
+  _topLeftPosition = topLeftPosition;
 }
 
 void Piece::draw(GLenum mode) {
@@ -225,4 +231,12 @@ void Piece::generateVAOFromMatrix (Piece_Type pieceType) {
   _vao.setVBO(1,colorVBO);
   print2dVBO(positionVBO, 2);
   print3dVBO(colorVBO, 3);
+}
+const glm::vec2 & Piece::getTransVect() const
+{
+  return _transVect;
+}
+void Piece::setTransVect(const glm::vec2 & transVect)
+{
+  _transVect = transVect;
 }

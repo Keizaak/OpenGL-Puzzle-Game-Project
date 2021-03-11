@@ -43,29 +43,52 @@ SimpleApp::SimpleApp(int windowWidth, int windowHeight)
 
   glm::mat4 model0(1.);
 
-  float angle = glm::pi<float>();
-  glm::mat4 model1 = glm::scale(glm::mat4(1.), glm::vec3(1.1, 1.1, 1.1));
-  model1 = glm::translate(model1, glm::vec3(0.5, 0.5, 0));
-
   std::shared_ptr<Piece> corner(new Piece(positionsCorner[0],BIG_L,0));
   corner->clockwiseRotate();
-  glm::mat4 model2 = createRotationAroundAnchor(corner);
+  glm::mat4 model2 = createRotationAroundAnchor(corner,model2);
   makeA2DShape(corner,positionsCorner,yellow,model2,iboCorner);
 
   std::shared_ptr<Piece> rod(new Piece(positionsRod[0],RECTANGLE_3X1,0));
   glm::mat4 model3 = createRotationAroundAnchor(rod);
-  makeA2DShape(rod,positionsRod,red,model3,iboRod);
+  makeA2DShape(rod,positionsRod,red,model0,iboRod);
 
   std::shared_ptr<Piece> smallRod(new Piece(positionsSmallRod[0],RECTANGLE_1X2,0));
   glm::mat4 model4 = createRotationAroundAnchor(smallRod);
-  makeA2DShape(smallRod,positionsSmallRod,blue,model4,iboSmallRod);
+  makeA2DShape(smallRod,positionsSmallRod,blue,model0,iboSmallRod);
 }
 
-glm::mat4 createRotationAroundAnchor(std::shared_ptr<Piece> piece){
+glm::mat4 createTranslate(std::shared_ptr<Piece> piece, Direction direction){
+  glm::vec2 directionVect;
+  switch (direction) {
+  case UP:
+    directionVect = glm::vec2(0.0, 0.33);
+    break;
+  case RIGHT:
+    directionVect = glm::vec2(0.33, 0.0);
+    break;
+  case DOWN:
+    directionVect = glm::vec2(0.0, -0.33);
+    break;
+  case LEFT:
+    directionVect = glm::vec2(-0.33, 0.0);
+    break;
+  default:
+    throw "Error: incorrect direction";
+  }
+
+  piece->setTransVect(piece->getTransVect() + directionVect);
+  glm::mat4 res = glm::translate(glm::mat4(1),glm::vec3(piece->getTransVect(),0.));
+
+  piece->setTopLeftPosition(piece->getPosition() + directionVect);
+
+  return res;
+}
+
+glm::mat4 createRotationAroundAnchor(std::shared_ptr<Piece> piece, glm::mat4 model){
   float newAngle = static_cast<float>(piece->getAngle())*2*glm::pi<float>()/360.;
 
+  std::cout << piece->getPosition().x << " " << piece->getPosition().y << std::endl;
   glm::mat4 rotationMatrix = glm::translate(glm::mat4(1.), glm::vec3(piece->getPosition(), 0));
-
   rotationMatrix = glm::rotate(rotationMatrix, newAngle, glm::vec3(0, 0, 1));
   rotationMatrix = glm::translate(rotationMatrix, glm::vec3(-piece->getPosition(), 0));
 
