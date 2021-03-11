@@ -36,7 +36,7 @@ enum Direction {
 
 class Piece {
 public:
-    Piece(Piece_Type type);
+  Piece(Piece_Type type);
     Piece(glm::vec2 position, Piece_Type type, int angle);
 
     void clockwiseRotate();
@@ -45,7 +45,7 @@ public:
 
     int getAngle();
     glm::vec2 getPosition();
-    void setVBO(int index, std::vector<glm::vec2> VBO);
+    template<typename T> void setVBO(int index, std::vector<T> VBO);
     void setIBO(std::vector<uint> IBO);
     void draw(GLenum mode);
 
@@ -55,7 +55,7 @@ private:
     int _angle;
     VAO _vao;
 
-    glm::vec3 generateRandomColor();
+    glm::vec3 generateRandomColorVector();
     void print2dVBO(const std::vector<glm::vec2> &VBO, int sizeOfVec);
     bool isAlreadyIn2dVBO(glm::vec2 point /* @todo RENAME */, const std::vector<glm::vec2>& VBO);
     void generateVAOFromMatrix(Piece_Type pieceType);
