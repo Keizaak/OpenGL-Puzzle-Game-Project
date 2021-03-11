@@ -26,9 +26,9 @@ SimpleApp::SimpleApp(int windowWidth, int windowHeight)
                                       {0.16, -0.5},
                                       {-0.17, -0.5}};
 
-  glm::vec4 yellow = {1,1,0,1};
-  glm::vec4 red = {1,0,0,1};
-  glm::vec4 blue = {0,0,1,1};
+  glm::vec3 yellow = {1,1,0};
+  glm::vec3 red = {1,0,0};
+  glm::vec3 blue = {0,0,1};
 
 
 
@@ -56,6 +56,10 @@ SimpleApp::SimpleApp(int windowWidth, int windowHeight)
   makeA2DShape(positionsCorner,yellow,iboCorner,model2);
   makeA2DShape(positionsRod,red,iboRod,model0);
   makeA2DShape(positionsSmallRod,blue,iboSmallRod,model0);
+
+  Piece corner(SQUARE_1X1);
+  corner.setVBO(0,positionsCorner);
+
 }
 
 glm::mat4 createRotationAroundAnchor(glm::vec2 anchor, float angle){
@@ -66,9 +70,9 @@ glm::mat4 createRotationAroundAnchor(glm::vec2 anchor, float angle){
   return rotationMatrix;
 }
 
-void SimpleApp::makeA2DShape(std::vector<glm::vec2> positions, glm::vec4 color, std::vector<uint> ibo, glm::mat4 model)
+void SimpleApp::makeA2DShape(std::vector<glm::vec2> positions, glm::vec3 color, std::vector<uint> ibo, glm::mat4 model)
 {
-  std::vector<glm::vec4> colors;
+  std::vector<glm::vec3> colors;
   for(int i=0; i< positions.size(); i++) {
     colors.push_back(color);
   }
@@ -79,6 +83,17 @@ void SimpleApp::makeA2DShape(std::vector<glm::vec2> positions, glm::vec4 color, 
   vao->setIBO(ibo);
 
   m_vaos.push_back(RenderObject::createInstance(m_program, vao, model));
+}
+
+void SimpleApp::makeA2DShape(Piece piece, int VBOSize, glm::vec3 color){
+  std::vector<glm::vec3> colors;
+  for(int i=0; i< VBOSize; i++) {
+    colors.push_back(color);
+  }
+
+  piece.setVBO(1,colors);
+
+  m_vaos.push_back(RenderObject::createInstance(m_program, piece._vao, model));
 }
 
 void SimpleApp::renderFrame() {
