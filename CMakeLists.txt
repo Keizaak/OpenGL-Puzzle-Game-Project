@@ -45,7 +45,7 @@ set(UTILS_SRC src/glApi.hpp
               src/utils.cpp
               src/Serialize.hpp
               src/Serialize.cpp
-              src/AttributeProperties.hpp)
+              src/AttributeProperties.hpp game/Asset_Designs/SimpleApp.cpp game/Asset_Designs/SimpleApp.hpp)
 add_library(utils ${UTILS_SRC})
 
 # +------------------------------------------------------------------+
