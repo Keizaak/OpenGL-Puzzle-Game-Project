@@ -8,6 +8,8 @@ int main(int argc, char * argv[]) {
 //    application->mainLoop();
 //    delete application;
 
+    srand( time( NULL ) );
+
     SimpleApp * application = new SimpleApp(500, 500);
     application->setCallbacks();
     application->mainLoop();

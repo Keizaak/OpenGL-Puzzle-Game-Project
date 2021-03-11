@@ -78,8 +78,6 @@ private:
 
 
 
-void generateVAOFromMatrix(Piece_Type pieceType);
-
 //void generateVAOFromMatrixv2 (Piece_Type pieceType);
 //void printMatrix4x4(bool matrix[4][4]);
 
