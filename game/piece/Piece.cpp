@@ -48,10 +48,11 @@ int Piece::getAngle() {
 glm::vec2 Piece::getPosition() {
     return _topLeftPosition;
 }
-
-void Piece::setVBO(int index, std::vector<glm::vec2> VBO) {
+template<typename T>
+void Piece::setVBO(int index, std::vector<T> VBO) {
     _vao.setVBO(index, VBO);
 }
+
 
 void Piece::setIBO(std::vector<uint> IBO) {
     _vao.setIBO(IBO);
@@ -61,11 +62,15 @@ void Piece::draw() {
     _vao.draw();
 }
 
-glm::vec3 generateRandomColor() {
+glm::vec3 Piece::generateRandomColorVector() {
     glm::vec3 color;
+    color = {0.5,0.5,0.5};
+
+    /*
     for (int i = 0; i < 3; i++) {
 
     }
+     */
 }
 
 
@@ -106,8 +111,11 @@ void Piece::generateVAOFromMatrix (Piece_Type pieceType) {
   }
 
   std::vector<glm::vec2> positionVBO;
+  std::vector<glm::vec3> colorVBO;
   std::vector<glm::vec2> tilesOccupied;
   std::vector<uint> IBO;
+
+  glm::vec3 colorVector = generateRandomColorVector();
 
   int lineNumber = 0;
   int firstLine = 4 * (int)pieceType;
@@ -165,31 +173,33 @@ void Piece::generateVAOFromMatrix (Piece_Type pieceType) {
 
   print2dVBO(tilesOccupied, 2);
 
-  glm::vec2 vecToPushBack;
+  glm::vec2 vecToPushBackinPositionVBO;
   for (auto & i : tilesOccupied) {
     std::cout <<"new tile" << std::endl;
     for (unsigned int deltax = 0; deltax <=1; deltax++) {
 
       for (unsigned int deltay = 0; deltay <=1; deltay++) {
         if (width > height) {
-          vecToPushBack = glm::vec2(
+          vecToPushBackinPositionVBO = glm::vec2(
               (i[0] + (float)deltax)*(2.0/width) - 1,
               ((i[1] + (float)deltay)*(2.0/width) - 1  +  (((float)width-(float)height)/(float)width)  )
               );
         } else {
-          vecToPushBack = glm::vec2(
+          vecToPushBackinPositionVBO = glm::vec2(
               ((i[0] + (float)deltax)*(2.0/height) - 1  +  (((float)height-(float)width)/(float)height)  ),
               (i[1] + (float)deltay)*(2.0/height) - 1
           );
         }
 
-        if(!isAlreadyIn2dVBO(vecToPushBack, positionVBO)) {
-          std::cout<< vecToPushBack[0] << " " << vecToPushBack[1] << std::endl;
-          positionVBO.emplace_back(vecToPushBack);
+        if(!isAlreadyIn2dVBO(vecToPushBackinPositionVBO, positionVBO)) {
+          std::cout<< vecToPushBackinPositionVBO[0] << " " << vecToPushBackinPositionVBO[1] << std::endl;
+          positionVBO.emplace_back(vecToPushBackinPositionVBO);
+          colorVBO.emplace_back(colorVector);
         }
       }
     }
   }
   _vao.setVBO(0, positionVBO);
+  _vao.setVBO(1,colorVBO);
   print2dVBO(positionVBO, 2);
 }
