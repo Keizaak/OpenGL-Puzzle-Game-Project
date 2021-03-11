@@ -20,8 +20,9 @@ int main() {
     /* test getVAOFromMatrix */
 
   VAO vao(2);
-  //Piece piece(Piece_Type::BIG_L);
-  //piece.generateVAOFromMatrix(Piece_Type::BIG_L);
+  Piece piece(Piece_Type::BIG_L);
+  piece.generateVAOFromMatrix(Piece_Type::BIG_L);
+
 
     return 0;
 }
