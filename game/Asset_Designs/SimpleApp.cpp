@@ -58,7 +58,7 @@ SimpleApp::SimpleApp(int windowWidth, int windowHeight)
 //  makeA2DShape(positionsSmallRod,blue,iboSmallRod,model0);
 
   std::shared_ptr<Piece> corner(new Piece(SQUARE_1X1));
-  makeA2DShape(corner,positionsCorner,yellow,model0);
+  makeA2DShape(corner,positionsCorner,yellow,model0,iboCorner);
 }
 
 glm::mat4 createRotationAroundAnchor(glm::vec2 anchor, float angle){
@@ -84,15 +84,16 @@ glm::mat4 createRotationAroundAnchor(glm::vec2 anchor, float angle){
 //  m_pieces.push_back(RenderObject::createInstance(m_program, vao, model));
 //}
 
-void SimpleApp::makeA2DShape(std::shared_ptr<Piece> piece,  std::vector<glm::vec2> positions, glm::vec3 color, glm::mat4 model){
-  piece->setVBO(0,positions);
+void SimpleApp::makeA2DShape(std::shared_ptr<Piece> piece,  std::vector<glm::vec2> positions, glm::vec3 color, glm::mat4 model, std::vector<uint> ibo){
+  piece->setPositionVBO(positions);
 
   std::vector<glm::vec3> colors;
-  for(int i=0; i< positions.size(); i++) {
+  for(long unsigned int i=0; i< positions.size(); i++) {
     colors.push_back(color);
   }
 
-  piece->setVBO(1,colors);
+  piece->setColorVBO(colors);
+  piece->setIBO(ibo);
 
   m_pieces.push_back(RenderObject::createInstance(m_program, piece, model));
 }
@@ -100,8 +101,8 @@ void SimpleApp::makeA2DShape(std::shared_ptr<Piece> piece,  std::vector<glm::vec
 void SimpleApp::renderFrame() {
   glClear(GL_COLOR_BUFFER_BIT);
 
-  for (const auto &vao : m_pieces) {
-    vao->draw();
+  for (const auto &piece : m_pieces) {
+    piece->draw();
   }
 }
 
@@ -135,7 +136,7 @@ void SimpleApp::RenderObject::draw(GLenum mode) const {
     glm::mat4 proj(1.);
     m_prog->setUniform("V", view);
     m_prog->setUniform("P", proj);
-    m_piece->draw();
+    m_piece->draw(mode);
     m_prog->unbind();
   }
 }

@@ -63,7 +63,7 @@ private:
   std::shared_ptr<Program> m_program;                ///< A GLSL progam
 
   void makeA2DShape(std::vector<glm::vec2>, glm::vec3 , std::vector<uint>,glm::mat4);
-  void makeA2DShape(std::shared_ptr<Piece> piece,  std::vector<glm::vec2> positions, glm::vec3 color, glm::mat4 model);
+  void makeA2DShape(std::shared_ptr<Piece> piece,  std::vector<glm::vec2> positions, glm::vec3 color, glm::mat4 model, std::vector<uint> ibo);
 };
 
 glm::mat4 createRotationAroundAnchor(glm::vec2 anchor, float angle);

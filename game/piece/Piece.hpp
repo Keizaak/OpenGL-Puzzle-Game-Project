@@ -48,7 +48,8 @@ public:
     void setPositionVBO(std::vector<glm::vec2> const & VBO);
     void setColorVBO(std::vector<glm::vec3> const & VBO);
     void setIBO(std::vector<uint> IBO);
-    void draw();
+    void draw(GLenum mode);
+    void verifVAO();
 
 private:
     glm::vec2 _topLeftPosition;
