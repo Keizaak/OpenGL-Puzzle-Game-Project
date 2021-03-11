@@ -82,7 +82,7 @@ void SimpleApp::makeA2DShape(std::vector<glm::vec2> positions, glm::vec3 color, 
   vao->setVBO(1,colors);
   vao->setIBO(ibo);
 
-  m_vaos.push_back(RenderObject::createInstance(m_program, vao, model));
+//  m_pieces.push_back(RenderObject::createInstance(m_program, vao, model));
 }
 
 void SimpleApp::makeA2DShape(Piece piece, int VBOSize, glm::vec3 color){
@@ -93,13 +93,13 @@ void SimpleApp::makeA2DShape(Piece piece, int VBOSize, glm::vec3 color){
 
   piece.setVBO(1,colors);
 
-  m_vaos.push_back(RenderObject::createInstance(m_program, piece._vao, model));
+  m_pieces.push_back(RenderObject::createInstance(m_program, piece, model));
 }
 
 void SimpleApp::renderFrame() {
   glClear(GL_COLOR_BUFFER_BIT);
 
-  for (const auto &vao : m_vaos) {
+  for (const auto &vao : m_pieces) {
     vao->draw();
   }
 }
@@ -117,24 +117,24 @@ void SimpleApp::setCallbacks() {
   glfwSetFramebufferSizeCallback(window, SimpleApp::resize);
 }
 
-SimpleApp::RenderObject::RenderObject(const std::shared_ptr<Program> &prog, const std::shared_ptr<VAO> &vao,
-                                           const glm::mat4 &modelWorld) : m_prog(prog), m_vao(vao), m_mw(modelWorld) {}
+SimpleApp::RenderObject::RenderObject(const std::shared_ptr<Program> &prog, const std::shared_ptr<Piece> &piece,
+                                           const glm::mat4 &modelWorld) : m_prog(prog), m_piece(piece), m_mw(modelWorld) {}
 
 std::shared_ptr<SimpleApp::RenderObject>
-SimpleApp::RenderObject::createInstance(const std::shared_ptr<Program> &prog, const std::shared_ptr<VAO> &vao,
+SimpleApp::RenderObject::createInstance(const std::shared_ptr<Program> &prog, const std::shared_ptr<Piece> &piece,
                                              const glm::mat4 &modelView) {
-  return std::shared_ptr<RenderObject>(new RenderObject(prog, vao, modelView));
+  return std::shared_ptr<RenderObject>(new RenderObject(prog, piece, modelView));
 }
 
 void SimpleApp::RenderObject::draw(GLenum mode) const {
-  if (m_vao and m_prog) {
+  if (m_piece and m_prog) {
     m_prog->bind();
     updateProgram();
     glm::mat4 view(1.);
     glm::mat4 proj(1.);
     m_prog->setUniform("V", view);
     m_prog->setUniform("P", proj);
-    m_vao->draw(mode);
+    m_piece->draw(mode);
     m_prog->unbind();
   }
 }

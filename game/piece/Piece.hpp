@@ -47,7 +47,7 @@ public:
     glm::vec2 getPosition();
     void setVBO(int index, std::vector<glm::vec2> VBO);
     void setIBO(std::vector<uint> IBO);
-    void draw();
+    void draw(GLenum mode);
 
 private:
     glm::vec2 _topLeftPosition;
