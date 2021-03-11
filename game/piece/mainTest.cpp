@@ -18,7 +18,10 @@ int main() {
 //    std::cout << piece.getPosition().x << " " << piece.getPosition().y << std::endl;
 
     /* test getVAOFromMatrix */
-    generateVAOFromMatrix(Piece_Type::BIG_L);
+
+  VAO vao(2);
+  //Piece piece(Piece_Type::BIG_L);
+  //piece.generateVAOFromMatrix(Piece_Type::BIG_L);
 
     return 0;
 }

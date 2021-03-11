@@ -76,9 +76,11 @@ add_executable(glitter
 target_link_libraries(glitter utils ${GLFW3_LIBRARIES} ${GLEW_LIBRARIES})
 
 add_executable(test
+        ${GLSLFiles}
+        game/piece/Piece.hpp
         game/piece/Piece.cpp
         game/piece/mainTest.cpp)
-
+target_link_libraries(test utils ${GLFW3_LIBRARIES} ${GLEW_LIBRARIES})
 # +------------------------------------------------------------------+
 # |  rubik's cube                                                    |
 # +------------------------------------------------------------------+
