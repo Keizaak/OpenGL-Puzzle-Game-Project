@@ -43,18 +43,24 @@ SimpleApp::SimpleApp(int windowWidth, int windowHeight)
 
   glm::mat4 model0(1.);
 
-  std::shared_ptr<Piece> corner(new Piece(positionsCorner[0],BIG_L,0));
+//  std::shared_ptr<Piece> corner(new Piece(positionsCorner[0],BIG_L,0));
+//  corner->clockwiseRotate();
+//  glm::mat4 model2 = createRotationAroundAnchor(corner,model2);
+//  makeA2DShape(corner,positionsCorner,yellow,model2,iboCorner);
+//
+//  std::shared_ptr<Piece> rod(new Piece(positionsRod[0],RECTANGLE_3X1,0));
+//  glm::mat4 model3 = createRotationAroundAnchor(rod);
+//  makeA2DShape(rod,positionsRod,red,model0,iboRod);
+//
+//  std::shared_ptr<Piece> smallRod(new Piece(positionsSmallRod[0],RECTANGLE_1X2,0));
+//  glm::mat4 model4 = createRotationAroundAnchor(smallRod);
+//  makeA2DShape(smallRod,positionsSmallRod,blue,model0,iboSmallRod);
+
+  std::shared_ptr<Piece> corner(new Piece(positionsCorner[0],N,0));
+  corner->generateVAOFromMatrix();
   corner->clockwiseRotate();
   glm::mat4 model2 = createRotationAroundAnchor(corner,model2);
-  makeA2DShape(corner,positionsCorner,yellow,model2,iboCorner);
-
-  std::shared_ptr<Piece> rod(new Piece(positionsRod[0],RECTANGLE_3X1,0));
-  glm::mat4 model3 = createRotationAroundAnchor(rod);
-  makeA2DShape(rod,positionsRod,red,model0,iboRod);
-
-  std::shared_ptr<Piece> smallRod(new Piece(positionsSmallRod[0],RECTANGLE_1X2,0));
-  glm::mat4 model4 = createRotationAroundAnchor(smallRod);
-  makeA2DShape(smallRod,positionsSmallRod,blue,model0,iboSmallRod);
+  makeA2DShape(corner,model0);
 }
 
 glm::mat4 createTranslate(std::shared_ptr<Piece> piece, Direction direction){
@@ -87,7 +93,6 @@ glm::mat4 createTranslate(std::shared_ptr<Piece> piece, Direction direction){
 glm::mat4 createRotationAroundAnchor(std::shared_ptr<Piece> piece, glm::mat4 model){
   float newAngle = static_cast<float>(piece->getAngle())*2*glm::pi<float>()/360.;
 
-  std::cout << piece->getPosition().x << " " << piece->getPosition().y << std::endl;
   glm::mat4 rotationMatrix = glm::translate(glm::mat4(1.), glm::vec3(piece->getPosition(), 0));
   rotationMatrix = glm::rotate(rotationMatrix, newAngle, glm::vec3(0, 0, 1));
   rotationMatrix = glm::translate(rotationMatrix, glm::vec3(-piece->getPosition(), 0));
@@ -106,6 +111,10 @@ void SimpleApp::makeA2DShape(std::shared_ptr<Piece> piece,  std::vector<glm::vec
   piece->setColorVBO(colors);
   piece->setIBO(ibo);
 
+  m_pieces.push_back(RenderObject::createInstance(m_program, piece, model));
+}
+
+void SimpleApp::makeA2DShape(std::shared_ptr<Piece> piece, glm::mat4 model){
   m_pieces.push_back(RenderObject::createInstance(m_program, piece, model));
 }
 

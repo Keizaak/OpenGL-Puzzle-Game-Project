@@ -64,6 +64,7 @@ private:
 
   void makeA2DShape(std::vector<glm::vec2>, glm::vec3 , std::vector<uint>,glm::mat4);
   void makeA2DShape(std::shared_ptr<Piece> piece,  std::vector<glm::vec2> positions, glm::vec3 color, glm::mat4 model, std::vector<uint> ibo);
+  void makeA2DShape(std::shared_ptr<Piece> piece, glm::mat4 model);
 };
 
 glm::mat4 createRotationAroundAnchor(std::shared_ptr<Piece> piece, glm::mat4 model = glm::mat4(1.));

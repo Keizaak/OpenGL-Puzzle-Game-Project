@@ -144,7 +144,7 @@ int Piece::positionInVBO(glm::vec2 point /* @todo RENAME */, const std::vector<g
 }
 
 
-void Piece::generateVAOFromMatrix (Piece_Type pieceType) {
+void Piece::generateVAOFromMatrix () {
   std::string lineBuffer;
   std::ifstream file("../game/piece/MatrixFile.txt");
   if (!file.is_open()){
@@ -161,7 +161,7 @@ void Piece::generateVAOFromMatrix (Piece_Type pieceType) {
   glm::vec3 colorVector = generateRandomColorVector();
 
   int lineNumber = 0;
-  int firstLine = 4 * (int)pieceType;
+  int firstLine = 4 * (int)_type;
 
   while (lineNumber != firstLine && getline(file, lineBuffer)) {
     std::cout<< "Ligne n°" << lineNumber << " = " << lineBuffer << std::endl;
@@ -258,9 +258,9 @@ void Piece::generateVAOFromMatrix (Piece_Type pieceType) {
     IBO.emplace_back(square_index[2]);
     IBO.emplace_back(square_index[3]);
   }
-  //_vao.setVBO(0, positionVBO);
-  //_vao.setVBO(1,colorVBO);
-  //_vao.setIBO(IBO);
+  _vao.setVBO(0, positionVBO);
+  _vao.setVBO(1,colorVBO);
+  _vao.setIBO(IBO);
   std::cout << "VBO position =" << std::endl;
   print2dVBO(positionVBO, 2);
   std::cout << "VBO couleur =" << std::endl;
@@ -268,6 +268,14 @@ void Piece::generateVAOFromMatrix (Piece_Type pieceType) {
   std::cout << "IBO =" << std::endl;
   printIBO(IBO);
   std::cout << "La couleur doit être cyan" << std::endl;
+}
+const glm::vec2 & Piece::getTransVect() const
+{
+  return _transVect;
+}
+void Piece::setTransVect(const glm::vec2 & transVect)
+{
+  _transVect = transVect;
 }
 
 /* tentative de générérer les VBOs autrement, à garder sous le code au cas ou*/

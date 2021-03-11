@@ -62,6 +62,7 @@ private:
   public:
     const glm::vec2 & getTransVect() const;
     void setTransVect(const glm::vec2 & transVect);
+
   private:
     glm::vec3 generateRandomColorVector();
     void print2dVBO(const std::vector<glm::vec2> &VBO, int sizeOfVec);
@@ -69,7 +70,7 @@ private:
     void printIBO(const std::vector<uint>& IBO);
     int positionInVBO(glm::vec2 point /* @todo RENAME */, const std::vector<glm::vec2>& VBO);
   public:
-    void generateVAOFromMatrix(Piece_Type pieceType);
+    void generateVAOFromMatrix();
 };
 
 /* tmp pour teste la suite */
