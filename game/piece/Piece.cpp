@@ -48,11 +48,14 @@ int Piece::getAngle() {
 glm::vec2 Piece::getPosition() {
     return _topLeftPosition;
 }
-template<typename T>
-void Piece::setVBO(int index, std::vector<T> VBO) {
-    _vao.setVBO(index, VBO);
+
+void Piece::setColorVBO(std::vector<glm::vec3> const & VBO) {
+    _vao.setVBO(1, VBO);
 }
 
+void Piece::setPositionVBO(std::vector<glm::vec2> const & VBO) {
+    _vao.setVBO(0, VBO);
+}
 
 void Piece::setIBO(std::vector<uint> IBO) {
     _vao.setIBO(IBO);
@@ -63,14 +66,15 @@ void Piece::draw() {
 }
 
 glm::vec3 Piece::generateRandomColorVector() {
-    glm::vec3 color;
-    color = {0.5,0.5,0.5};
+    glm::vec3 colorVector;
+    colorVector = {0.5,0.5,0.5};
 
     /*
     for (int i = 0; i < 3; i++) {
 
     }
      */
+    return colorVector;
 }
 
 
@@ -84,6 +88,24 @@ void Piece::print2dVBO(const std::vector<glm::vec2> &VBO, int sizeOfVec) {
     {
       std::cout << i[j];
       if(j != (std::vector<glm::vec2>::size_type)sizeOfVec -1) {
+        std::cout << ',';
+      }
+    }
+    std::cout << "}," << std::endl;
+  }
+  std::cout << "}" << std::endl;
+}
+
+void Piece::print3dVBO(const std::vector<glm::vec3> &VBO, int sizeOfVec) {
+  std::cout << "{";
+  std::vector<glm::vec3>::size_type j;
+  for (auto & i : VBO)
+  {
+    std::cout << "{";
+    for (j = (std::vector<glm::vec3>::size_type)0; j < (std::vector<glm::vec3>::size_type)sizeOfVec; j++ )
+    {
+      std::cout << i[j];
+      if(j != (std::vector<glm::vec3>::size_type)sizeOfVec -1) {
         std::cout << ',';
       }
     }
@@ -202,4 +224,5 @@ void Piece::generateVAOFromMatrix (Piece_Type pieceType) {
   _vao.setVBO(0, positionVBO);
   _vao.setVBO(1,colorVBO);
   print2dVBO(positionVBO, 2);
+  print3dVBO(colorVBO, 3);
 }
