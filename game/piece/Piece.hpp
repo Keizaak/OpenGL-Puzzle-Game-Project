@@ -66,9 +66,20 @@ private:
     glm::vec3 generateRandomColorVector();
     void print2dVBO(const std::vector<glm::vec2> &VBO, int sizeOfVec);
     void print3dVBO(const std::vector<glm::vec3> &VBO, int sizeOfVec);
-    bool isAlreadyIn2dVBO(glm::vec2 point /* @todo RENAME */, const std::vector<glm::vec2>& VBO);
+    void printIBO(const std::vector<uint>& IBO);
+    int positionInVBO(glm::vec2 point /* @todo RENAME */, const std::vector<glm::vec2>& VBO);
   public:
     void generateVAOFromMatrix(Piece_Type pieceType);
 };
+
+/* tmp pour teste la suite */
+
+
+
+
+void generateVAOFromMatrix(Piece_Type pieceType);
+
+//void generateVAOFromMatrixv2 (Piece_Type pieceType);
+//void printMatrix4x4(bool matrix[4][4]);
 
 #endif //GLITTER_PIECE_HPP
