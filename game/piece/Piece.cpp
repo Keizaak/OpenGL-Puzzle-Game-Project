@@ -1,7 +1,7 @@
 #include "Piece.hpp"
 
 Piece::Piece(Piece_Type type)
-    : _type(type), _vao(2)
+    : _type(type)
 {
     _topLeftPosition = glm::vec2(0, 0);
     _angle = 0;
@@ -10,7 +10,7 @@ Piece::Piece(Piece_Type type)
 }
 
 Piece::Piece(glm::vec2 position, Piece_Type type, int angle)
-    : _topLeftPosition(position), _type(type), _angle(angle), _vao(2)
+    : _topLeftPosition(position), _type(type), _angle(angle)
 {
     _transVect = glm::vec2(0, 0);
     //generateVAOFromMatrix(_type);
@@ -43,7 +43,7 @@ void Piece::move(Direction direction) {
     }
 }
 
-int Piece::getAngle() {
+int Piece::getAngle() const {
     return _angle;
 }
 
@@ -51,97 +51,13 @@ glm::vec2 Piece::getPosition() {
     return _topLeftPosition;
 }
 
-void Piece::setColorVBO(std::vector<glm::vec3> const & VBO) {
-    _vao.setVBO(1, VBO);
-}
-
-void Piece::setPositionVBO(std::vector<glm::vec2> const & VBO) {
-    _vao.setVBO(0, VBO);
-}
-
-void Piece::setIBO(std::vector<uint> IBO) {
-    _vao.setIBO(IBO);
-}
-
 void Piece::setTopLeftPosition(glm::vec2 topLeftPosition){
   _topLeftPosition = topLeftPosition;
 }
 
-void Piece::draw(GLenum mode) {
-    _vao.draw(mode);
-}
-
-
-
-glm::vec3 Piece::generateRandomColorVector() {
-  glm::vec3 colorVector;
-  colorVector = {0.8,0,0};
-  /* @TODO gérer l'aléatoire + hsv format */
-  //colorVector = {rand()/RAND_MAX,1,1};
-  return colorVector;
-}
-
-
-void Piece::print2dVBO(const std::vector<glm::vec2> &VBO, int sizeOfVec) {
-  std::cout << "{";
-  std::vector<glm::vec2>::size_type j;
-  for (auto & i : VBO)
-  {
-    std::cout << "{";
-    for (j = (std::vector<glm::vec2>::size_type)0; j < (std::vector<glm::vec2>::size_type)sizeOfVec; j++ )
-    {
-      std::cout << i[j];
-      if(j != (std::vector<glm::vec2>::size_type)sizeOfVec -1) {
-        std::cout << ',';
-      }
-    }
-    std::cout << "}," << std::endl;
-  }
-  std::cout << "}" << std::endl;
-}
-
-void Piece::print3dVBO(const std::vector<glm::vec3> &VBO, int sizeOfVec) {
-  std::cout << "{";
-  std::vector<glm::vec3>::size_type j;
-  for (auto & i : VBO)
-  {
-    std::cout << "{";
-    for (j = (std::vector<glm::vec3>::size_type)0; j < (std::vector<glm::vec3>::size_type)sizeOfVec; j++ )
-    {
-      std::cout << i[j];
-      if(j != (std::vector<glm::vec3>::size_type)sizeOfVec -1) {
-        std::cout << ',';
-      }
-    }
-    std::cout << "}," << std::endl;
-  }
-  std::cout << "}" << std::endl;
-}
-
-void Piece::printIBO(const std::vector<uint>& IBO) {
-  std::cout << "{";
-  for (auto & i : IBO)
-  {
-    std::cout << i << ", ";
-  }
-  std::cout << "}" << std::endl;
-}
-
-int Piece::positionInVBO(glm::vec2 point /* @todo RENAME */, const std::vector<glm::vec2>& VBO) {
-  int index = 0;
-  for (auto & i : VBO)
-  {
-    if (abs(point[0]-i[0]) < EPSILON && abs(point[1]-i[1]) < EPSILON) {
-      return index;
-    }
-    index++;
-  }
-  return -1;
-}
-
 void Piece::generateVAOFromMatrix () {
   std::string lineBuffer;
-  std::ifstream file("../game/piece/MatrixFile.txt");
+  std::ifstream file("../game/piece/pieces_file.txt");
   if (!file.is_open()){
     std::cerr << "Error: " << strerror(errno) << std::endl;
   }
@@ -249,7 +165,7 @@ void printMatrix4x4(bool matrix[4][4]) {
 }
 void generateVAOFromMatrixv2 (Piece_Type pieceType) {
   std::string lineBuffer;
-  std::ifstream file("../game/piece/MatrixFile.txt");
+  std::ifstream file("../game/piece/pieces_file.txt");
   if (!file.is_open()){
     std::cerr << "Error: " << strerror(errno) << std::endl;
   }
@@ -369,4 +285,3 @@ void generateVAOFromMatrixv2 (Piece_Type pieceType) {
   std::cout << "La couleur doit être cyan" << std::endl;
 }
 */
-

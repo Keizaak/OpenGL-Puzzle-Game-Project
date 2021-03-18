@@ -74,7 +74,7 @@ add_executable(glitter
   game/Asset_Designs/SimpleApp.cpp
   game/Asset_Designs/SimpleApp.hpp
   game/piece/Piece.cpp
-  )
+        game/piece/Shape.cpp game/piece/Shape.hpp)
 target_link_libraries(glitter utils ${GLFW3_LIBRARIES} ${GLEW_LIBRARIES})
 
 add_executable(test

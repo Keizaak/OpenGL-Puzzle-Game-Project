@@ -4,8 +4,7 @@
 #include <fstream>
 #include "glApi.hpp"
 #include <glm/vec2.hpp>
-
-#define EPSILON 0.01 /* for equality between 2 floats in the VBO */
+#include "Shape.hpp"
 
 enum Piece_Type {
     SQUARE_1X1 = 0,
@@ -35,51 +34,27 @@ enum Direction {
     NONE
 };
 
-class Piece {
+class Piece : public Shape {
 public:
-    Piece(Piece_Type type);
+    explicit Piece(Piece_Type type);
     Piece(glm::vec2 position, Piece_Type type, int angle);
 
     void clockwiseRotate();
     void counterClockwiseRotate();
     void move(Direction direction);
 
-    int getAngle();
+    int getAngle() const;
     glm::vec2 getPosition();
-    void setPositionVBO(std::vector<glm::vec2> const & VBO);
-    void setColorVBO(std::vector<glm::vec3> const & VBO);
-    void setIBO(std::vector<uint> IBO);
     void setTopLeftPosition(glm::vec2 topLeftPosition);
-    void draw(GLenum mode);
-    void verifVAO();
+    const glm::vec2 & getTransVect() const;
+    void setTransVect(const glm::vec2 & transVect);
+    void generateVAOFromMatrix() override;
 
 private:
     glm::vec2 _topLeftPosition;
     Piece_Type _type;
     int _angle;
-    VAO _vao;
     glm::vec2 _transVect;
-
-  public:
-    const glm::vec2 & getTransVect() const;
-    void setTransVect(const glm::vec2 & transVect);
-
-  private:
-    glm::vec3 generateRandomColorVector();
-    void print2dVBO(const std::vector<glm::vec2> &VBO, int sizeOfVec);
-    void print3dVBO(const std::vector<glm::vec3> &VBO, int sizeOfVec);
-    void printIBO(const std::vector<uint>& IBO);
-    int positionInVBO(glm::vec2 point /* @todo RENAME */, const std::vector<glm::vec2>& VBO);
-  public:
-    void generateVAOFromMatrix();
 };
-
-/* tmp pour teste la suite */
-
-
-
-
-//void generateVAOFromMatrixv2 (Piece_Type pieceType);
-//void printMatrix4x4(bool matrix[4][4]);
 
 #endif //GLITTER_PIECE_HPP
