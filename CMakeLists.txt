@@ -65,13 +65,15 @@ add_executable(glitter
   examples/PA4Application.cpp
   examples/PA5Application.hpp
   examples/PA5Application.cpp
+        #examples/old_main.cpp
   ${GLSLFiles}
   game/main.cpp
+  game/keyboard/command.cpp
+  game/keyboard/command.h
   game/GameApplication.cpp
-        game/Asset_Designs/SimpleApp.cpp
-        game/Asset_Designs/SimpleApp.hpp
-        game/piece/Piece.cpp
-
+  game/Asset_Designs/SimpleApp.cpp
+  game/Asset_Designs/SimpleApp.hpp
+  game/piece/Piece.cpp
   )
 target_link_libraries(glitter utils ${GLFW3_LIBRARIES} ${GLEW_LIBRARIES})
 
@@ -79,7 +81,9 @@ add_executable(test
         ${GLSLFiles}
         game/piece/Piece.hpp
         game/piece/Piece.cpp
-        game/piece/mainTest.cpp)
+        game/piece/mainTest.cpp
+        game/keyboard/command.cpp
+        game/keyboard/command.h)
 target_link_libraries(test utils ${GLFW3_LIBRARIES} ${GLEW_LIBRARIES})
 # +------------------------------------------------------------------+
 # |  rubik's cube                                                    |

@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include "utils.hpp"
+#include "../keyboard/command.h"
 
 
 SimpleApp::SimpleApp(int windowWidth, int windowHeight)
@@ -137,6 +138,25 @@ void SimpleApp::resize(GLFWwindow *, int framebufferWidth, int framebufferHeight
 void SimpleApp::setCallbacks() {
   GLFWwindow *window = glfwGetCurrentContext();
   glfwSetFramebufferSizeCallback(window, SimpleApp::resize);
+  glfwSetKeyCallback(window, SimpleApp::keyCallback);
+}
+
+void SimpleApp::keyCallback(GLFWwindow *window, int key, int /*scancode*/, int action, int /*mods*/) {
+    SimpleApp &app = *static_cast<SimpleApp *>(glfwGetWindowUserPointer(window));
+
+    if (action == GLFW_PRESS) {
+        if (key == GLFW_KEY_Q || key == GLFW_KEY_RIGHT_SHIFT) {
+            std::cout << "Counterclockwise rotation" << std::endl;
+        } else if (key == GLFW_KEY_E || key == GLFW_KEY_KP_1 ) {
+            std::cout << "Clockwise rotation" << std::endl;
+        } else {
+            Direction direction = getDirectionFromKeyboard(key);
+            if (direction != Direction::NONE) {
+                //current_piece.move(direction);
+                std::cout << "Moved: " << direction << std::endl;
+            }
+        }
+    }
 }
 
 SimpleApp::RenderObject::RenderObject(const std::shared_ptr<Program> &prog, const std::shared_ptr<Piece> &piece,

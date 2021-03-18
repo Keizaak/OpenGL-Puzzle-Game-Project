@@ -50,21 +50,13 @@ private:
   };
 
 private:
-  class Shape {
-  public:
-    std::string _name;
-    std::vector<glm::vec2> _positions;
-    glm::vec4 _color;
-    std::vector<uint> _ibo;
-    };
-
-private:
   std::vector<std::shared_ptr<RenderObject>> m_pieces; ///< List of instanced VAOs (VAO + modelView matrix)
   std::shared_ptr<Program> m_program;                ///< A GLSL progam
 
   void makeA2DShape(std::vector<glm::vec2>, glm::vec3 , std::vector<uint>,glm::mat4);
   void makeA2DShape(std::shared_ptr<Piece> piece,  std::vector<glm::vec2> positions, glm::vec3 color, glm::mat4 model, std::vector<uint> ibo);
   void makeA2DShape(std::shared_ptr<Piece> piece, glm::mat4 model);
+  static void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
 };
 
 glm::mat4 createRotationAroundAnchor(std::shared_ptr<Piece> piece, glm::mat4 model = glm::mat4(1.));
