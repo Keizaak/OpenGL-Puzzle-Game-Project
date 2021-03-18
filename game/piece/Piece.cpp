@@ -6,14 +6,14 @@ Piece::Piece(Piece_Type type)
     _topLeftPosition = glm::vec2(0, 0);
     _angle = 0;
     _transVect = glm::vec2(0, 0);
-    //generateVAOFromMatrix(_type);
+    generateVAOFromMatrix();
 }
 
 Piece::Piece(glm::vec2 position, Piece_Type type, int angle)
     : _topLeftPosition(position), _type(type), _angle(angle)
 {
     _transVect = glm::vec2(0, 0);
-    //generateVAOFromMatrix(_type);
+    generateVAOFromMatrix();
 }
 
 void Piece::clockwiseRotate() {
@@ -108,13 +108,13 @@ void Piece::generateVAOFromMatrix () {
       for (unsigned int deltay = 0; deltay <=1; deltay++) {
         if (width > height) {
           vecToPushBackinPositionVBO = glm::vec2(
-              (i[0] + (float)deltax)*(2.0/width) - 1,
-              ((i[1] + (float)deltay)*(2.0/width) - 1  +  (((float)width-(float)height)/(float)width)  )
+                  -((i[0] + (float)deltax)*/*(2.0/width)*/ - 1),
+              -(((i[1] + (float)deltay)*/*(2.0/width)*/ - 1  /*+  (((float)width-(float)height)/(float)width)*/  ))
           );
         } else {
           vecToPushBackinPositionVBO = glm::vec2(
-              ((i[0] + (float)deltax)*(2.0/height) - 1  +  (((float)height-(float)width)/(float)height)  ),
-              (i[1] + (float)deltay)*(2.0/height) - 1
+              -(((i[0] + (float)deltax)*/*(2.0/height)*/ - 1  /*+  (((float)height-(float)width)/(float)height)*/  )),
+              -((i[1] + (float)deltay)*/*(2.0/height)*/ - 1)
           );
         }
         std::cout<< vecToPushBackinPositionVBO[0] << " " << vecToPushBackinPositionVBO[1] << std::endl;
@@ -136,6 +136,9 @@ void Piece::generateVAOFromMatrix () {
     IBO.emplace_back(square_index[2]);
     IBO.emplace_back(square_index[3]);
   }
+  std::cout << "Position VBO" << std::endl;
+  print2dVBO(positionVBO, 2);
+  std::cout << "Position VBO" << std::endl;
   std::cout << "Color VBO" << std::endl;
   print3dVBO(colorVBO, 3);
   std::cout << "Color VBO" << std::endl;

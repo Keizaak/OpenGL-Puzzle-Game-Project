@@ -9,59 +9,9 @@ SimpleApp::SimpleApp(int windowWidth, int windowHeight)
         : Application(windowWidth, windowHeight, "Puzzle Game"),
           m_program(new Program("shaders/game.v.glsl", "shaders/game.f.glsl"))
 {
-    std::vector<glm::vec2> positionsCorner = {{-0.5, 0.5},
-                                              {0.16, 0.5},
-                                              {0.16, 0.16},
-                                              {-0.17, 0.16},
-                                              {-0.17, -0.5},
-                                              {-0.5, -0.5},
-                                              {-0.5,0.16}};
 
-    std::vector<glm::vec2> positionsRod = {{0.16, 0.5},
-                                           {0.5, 0.5},
-                                           {0.5, -0.5},
-                                           {0.16, -0.5}};
-
-    std::vector<glm::vec2> positionsSmallRod = {{-0.17, 0.16},
-                                                {0.16, 0.16},
-                                                {0.16, -0.5},
-                                                {-0.17, -0.5}};
-
-    glm::vec3 yellow = {1,1,0};
-    glm::vec3 red = {1,0,0};
-    glm::vec3 blue = {0,0,1};
-
-
-
-    std::vector<uint> iboCorner = {0, 1, 2,
-                                   2, 6, 0,
-                                   3, 4, 5,
-                                   5, 6, 3};
-    std::vector<uint> iboRod = {0, 1, 2,
-                                2, 3, 0};
-    std::vector<uint> iboSmallRod = {0, 1, 2,
-                                     2, 3, 0};
-
-    glm::mat4 model0(1.);
-
-//  std::shared_ptr<Piece> corner(new Piece(positionsCorner[0],BIG_L,0));
-//  corner->clockwiseRotate();
-//  glm::mat4 model2 = createRotationAroundAnchor(corner,model2);
-//  makeA2DShape(corner,positionsCorner,yellow,model2,iboCorner);
-//
-//  std::shared_ptr<Piece> rod(new Piece(positionsRod[0],RECTANGLE_3X1,0));
-//  glm::mat4 model3 = createRotationAroundAnchor(rod);
-//  makeA2DShape(rod,positionsRod,red,model0,iboRod);
-//
-//  std::shared_ptr<Piece> smallRod(new Piece(positionsSmallRod[0],RECTANGLE_1X2,0));
-//  glm::mat4 model4 = createRotationAroundAnchor(smallRod);
-//  makeA2DShape(smallRod,positionsSmallRod,blue,model0,iboSmallRod);
-
-    std::shared_ptr<Piece> corner(new Piece(positionsCorner[0],N,0));
-    corner->generateVAOFromMatrix();
-    corner->clockwiseRotate();
-    glm::mat4 model2 = createRotationAroundAnchor(corner,model2);
-    makeA2DShape(corner,model0);
+    std::shared_ptr<Piece> corner(new Piece(BIG_L));
+    makeA2DShape(corner,glm::mat4(1));
 }
 
 glm::mat4 createTranslate(std::shared_ptr<Piece> piece, Direction direction){
