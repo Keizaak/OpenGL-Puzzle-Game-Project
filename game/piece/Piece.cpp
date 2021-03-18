@@ -143,6 +143,7 @@ void Piece::generateVAOFromMatrix () {
   _vao.setVBO(1, colorVBO);
   _vao.setIBO(IBO);
 
+
 }
 const glm::vec2 & Piece::getTransVect() const
 {
