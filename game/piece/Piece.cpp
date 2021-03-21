@@ -56,93 +56,80 @@ void Piece::setTopLeftPosition(glm::vec2 topLeftPosition){
 }
 
 void Piece::generateVAOFromMatrix () {
-  std::string lineBuffer;
-  std::ifstream file("../game/piece/pieces_file.txt");
-  if (!file.is_open()){
-    std::cerr << "Error: " << strerror(errno) << std::endl;
-  }
-  std::vector<glm::vec2> positionVBO;
-  std::vector<glm::vec3> colorVBO;
-  std::vector<glm::vec2> tilesOccupied;
-  std::vector<uint> IBO;
-  int index = 0;
-  int square_index[4];
-  glm::vec3 colorVector = generateRandomColorVector();
-  int lineNumber = 0;
-  int firstLine = 4 * (int)_type;
-
-  while (lineNumber != firstLine && getline(file, lineBuffer)) {
-    lineNumber++;
-  }
-  if (lineNumber != firstLine) {
-    std::cout << "Reading file error" << std::endl;
-  }
-  int minx = 4, maxx = 0, miny = 4, maxy = 0;
-  for (lineNumber = 0; lineNumber <= 3; lineNumber++) {
-    getline(file, lineBuffer);
-    for (int columnNumber = 0; columnNumber <= 3; columnNumber++) {
-      if (lineBuffer.at(columnNumber) == '1') {
-        tilesOccupied.emplace_back(columnNumber,lineNumber);
-
-        if (lineNumber < miny) {
-          miny = lineNumber;
-        }
-        if (lineNumber > maxy) {
-          maxy = lineNumber;
-        }
-        if (columnNumber < minx) {
-          minx = columnNumber;
-        }
-        if (columnNumber > maxx) {
-          maxx = columnNumber;
-        }
-      }
+    std::string lineBuffer;
+    std::ifstream file("../game/piece/pieces_file.txt");
+    if (!file.is_open()){
+        std::cerr << "Error: " << strerror(errno) << std::endl;
     }
-  }
-  file.close();
-  int height = maxy - miny + 1;
-  int width = maxx - minx + 1;
-  glm::vec2 vecToPushBackinPositionVBO;
-  for (auto & i : tilesOccupied) {
-    for (unsigned int deltax = 0; deltax <=1; deltax++) {
-      for (unsigned int deltay = 0; deltay <=1; deltay++) {
-        if (width > height) {
-          vecToPushBackinPositionVBO = glm::vec2(
-              (i[0] + (float)deltax)*(2.0/width) - 1,
-              ((i[1] + (float)deltay)*(2.0/width) - 1  +  (((float)width-(float)height)/(float)width)  )
-          );
-        } else {
-          vecToPushBackinPositionVBO = glm::vec2(
-              ((i[0] + (float)deltax)*(2.0/height) - 1  +  (((float)height-(float)width)/(float)height)  ),
-              (i[1] + (float)deltay)*(2.0/height) - 1
-          );
-        }
-        std::cout<< vecToPushBackinPositionVBO[0] << " " << vecToPushBackinPositionVBO[1] << std::endl;
-        if(positionInVBO(vecToPushBackinPositionVBO, positionVBO) != -1) {
-          square_index[2 * deltax + deltay] = positionInVBO(vecToPushBackinPositionVBO, positionVBO);
-        }
-        if(positionInVBO(vecToPushBackinPositionVBO, positionVBO) == -1) {
-          positionVBO.emplace_back(vecToPushBackinPositionVBO);
-          square_index[2 * deltax + deltay] = index;
-          index++;
-          colorVBO.emplace_back(colorVector);
-        }
-      }
+    std::vector<glm::vec2> positionVBO;
+    std::vector<glm::vec3> colorVBO;
+    std::vector<glm::vec2> tilesOccupied;
+    std::vector<uint> IBO;
+    int index = 0;
+    int square_index[4];
+    glm::vec3 colorVector = generateRandomColorVector();
+    int lineNumber = 0;
+    int firstLine = 4 * (int)_type;
+
+    while (lineNumber != firstLine && getline(file, lineBuffer)) {
+        lineNumber++;
     }
-    IBO.emplace_back(square_index[0]);
-    IBO.emplace_back(square_index[1]);
-    IBO.emplace_back(square_index[2]);
-    IBO.emplace_back(square_index[1]);
-    IBO.emplace_back(square_index[2]);
-    IBO.emplace_back(square_index[3]);
-  }
-  std::cout << "Color VBO" << std::endl;
-  print3dVBO(colorVBO, 3);
-  std::cout << "Color VBO" << std::endl;
-  _vao.setVBO(0, positionVBO);
-  _vao.setVBO(1, colorVBO);
-  _vao.setIBO(IBO);
+    if (lineNumber != firstLine) {
+        std::cout << "Reading file error" << std::endl;
+    }
+    int minx = 4, maxx = 0, miny = 4, maxy = 0;
+    for (lineNumber = 0; lineNumber <= 3; lineNumber++) {
+        getline(file, lineBuffer);
+        for (int columnNumber = 0; columnNumber <= 3; columnNumber++) {
+            if (lineBuffer.at(columnNumber) == '1') {
+                tilesOccupied.emplace_back(columnNumber,lineNumber);
+
+                if (lineNumber < miny) {
+                    miny = lineNumber;
+                }
+                if (lineNumber > maxy) {
+                    maxy = lineNumber;
+                }
+                if (columnNumber < minx) {
+                    minx = columnNumber;
+                }
+                if (columnNumber > maxx) {
+                    maxx = columnNumber;
+                }
+            }
+        }
+    }
+    file.close();
+    int height = maxy - miny + 1;
+    int width = maxx - minx + 1;
+    glm::vec2 vecToPushBackinPositionVBO;
+    for (auto & i : tilesOccupied) {
+        for (unsigned int deltax = 0; deltax <=1; deltax++) {
+            for (unsigned int deltay = 0; deltay <=1; deltay++) {
+                vecToPushBackinPositionVBO = glm::vec2(2 * (i[0] + (float)deltax) - 1 ,-(2 * (i[1] + (float)deltay) - 1));
+                if(positionInVBO(vecToPushBackinPositionVBO, positionVBO) != -1) {
+                    square_index[2 * deltax + deltay] = positionInVBO(vecToPushBackinPositionVBO, positionVBO);
+                }
+                if(positionInVBO(vecToPushBackinPositionVBO, positionVBO) == -1) {
+                    positionVBO.emplace_back(vecToPushBackinPositionVBO);
+                    square_index[2 * deltax + deltay] = index;
+                    index++;
+                    colorVBO.emplace_back(colorVector);
+                }
+            }
+        }
+        IBO.emplace_back(square_index[0]);
+        IBO.emplace_back(square_index[1]);
+        IBO.emplace_back(square_index[2]);
+        IBO.emplace_back(square_index[1]);
+        IBO.emplace_back(square_index[2]);
+        IBO.emplace_back(square_index[3]);
+    }
+    _vao.setVBO(0, positionVBO);
+    _vao.setVBO(1, colorVBO);
+    _vao.setIBO(IBO);
 }
+
 const glm::vec2 & Piece::getTransVect() const
 {
   return _transVect;
