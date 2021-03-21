@@ -1,51 +1,63 @@
+#include <glm/gtc/matrix_transform.hpp>
 #include "Piece.hpp"
 
 Piece::Piece(Piece_Type type)
     : _type(type)
 {
-    _topLeftPosition = glm::vec2(0, 0);
     _angle = 0;
-    _transVect = glm::vec2(0, 0);
+    _scale = 1;
+    _translationVector = glm::vec2(0, 0);
+    _model = glm::mat4(1);
     generateVAOFromMatrix();
 }
 
+glm::mat4 Piece::getModel() {
+    return _model;
+}
+
+void Piece::setScale(float scale) {
+    _scale = scale;
+    changeModelMatrix();
+}
+
 void Piece::clockwiseRotate() {
-    _angle = (_angle + 90) % 360;
+    _angle = (_angle - 90) % 360;
+    changeModelMatrix();
 }
 
 void Piece::counterClockwiseRotate() {
-    _angle = (_angle - 90) % 360;
+    _angle = (_angle + 90) % 360;
+    changeModelMatrix();
 }
 
 void Piece::move(Direction direction) {
     switch (direction) {
         case UP:
-            _topLeftPosition.y--;
+            _translationVector.y += 2 * _scale;
             break;
         case RIGHT:
-            _topLeftPosition.x++;
+            _translationVector.x += 2 * _scale;
             break;
         case DOWN:
-            _topLeftPosition.y++;
+            _translationVector.y -= 2 * _scale;
             break;
         case LEFT:
-            _topLeftPosition.x--;
+            _translationVector.x -= 2 * _scale;
             break;
         default:
             throw "Error: incorrect direction";
     }
+    changeModelMatrix();
 }
 
-int Piece::getAngle() const {
-    return _angle;
+float Piece::convertAngleToRadian() {
+    return static_cast<float>(_angle * 2 * M_PI /360.);
 }
 
-glm::vec2 Piece::getPosition() {
-    return _topLeftPosition;
-}
-
-void Piece::setTopLeftPosition(glm::vec2 topLeftPosition){
-  _topLeftPosition = topLeftPosition;
+void Piece::changeModelMatrix() {
+    _model = glm::translate(glm::mat4(1), glm::vec3(_translationVector, 0));
+    _model = glm::rotate(_model, convertAngleToRadian(),glm::vec3(0, 0, 1));
+    _model = glm::scale(_model, glm::vec3(_scale, _scale, 1));
 }
 
 void Piece::generateVAOFromMatrix () {
@@ -121,13 +133,4 @@ void Piece::generateVAOFromMatrix () {
     _vao.setVBO(0, positionVBO);
     _vao.setVBO(1, colorVBO);
     _vao.setIBO(IBO);
-}
-
-const glm::vec2 & Piece::getTransVect() const
-{
-  return _transVect;
-}
-void Piece::setTransVect(const glm::vec2 & transVect)
-{
-  _transVect = transVect;
 }
