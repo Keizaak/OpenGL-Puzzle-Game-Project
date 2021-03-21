@@ -54,11 +54,14 @@ private:
     std::vector<std::shared_ptr<RenderObject>> m_pieces; ///< List of instanced VAOs (VAO + modelView matrix)
     std::shared_ptr<Program> m_program;                ///< A GLSL progam
     std::shared_ptr<RenderObject> _currentPiece;
+    int _currentPieceIndex;
 
     void makeA2DShape(std::shared_ptr<Piece> piece);
     static void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
     void rotatePiece(int direction);
     void movePiece(Direction direction);
+    std::shared_ptr<RenderObject> givePointerInVector();
+    void changeCurrentPiece();
 };
 
 #endif // GLITTER_SIMPLEAPP_HPP

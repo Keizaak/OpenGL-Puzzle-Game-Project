@@ -13,14 +13,27 @@ SimpleApp::SimpleApp(int windowWidth, int windowHeight)
     glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
     resize(window, windowWidth, windowHeight);
 
+    _currentPieceIndex = 2;
+
     std::shared_ptr<Piece> corner(new Piece(BIG_L));
+    std::shared_ptr<Piece> small_rod(new Piece(RECTANGLE_1X2));
+    std::shared_ptr<Piece> big_rod(new Piece(RECTANGLE_3X1));
     corner->setScale(0.05);
+    small_rod->setScale(0.05);
+    big_rod->setScale(0.05);
     makeA2DShape(corner);
+    makeA2DShape(big_rod);
+    makeA2DShape(small_rod);
+
+    _currentPiece = givePointerInVector();
+}
+
+std::shared_ptr<SimpleApp::RenderObject> SimpleApp::givePointerInVector(){
+  return m_pieces[_currentPieceIndex];
 }
 
 void SimpleApp::makeA2DShape(std::shared_ptr<Piece> piece) {
-    _currentPiece = RenderObject::createInstance(m_program, piece);
-    m_pieces.push_back(_currentPiece);
+    m_pieces.push_back(RenderObject::createInstance(m_program, piece));
 }
 
 void SimpleApp::renderFrame() {
@@ -59,6 +72,8 @@ void SimpleApp::keyCallback(GLFWwindow *window, int key, int /*scancode*/, int a
             app.rotatePiece(1);
         } else if (key == GLFW_KEY_E || key == GLFW_KEY_KP_1) {
             app.rotatePiece(0);
+        }else if (key == GLFW_KEY_SPACE){
+            app.changeCurrentPiece();
         } else {
             Direction direction = getDirectionFromKeyboard(key);
             if (direction != Direction::NONE) {
@@ -80,6 +95,11 @@ void SimpleApp::rotatePiece(int direction) {
 void SimpleApp::movePiece(Direction direction) {
     _currentPiece->getPiece()->move(direction);
 }
+
+void SimpleApp::changeCurrentPiece(){
+    _currentPieceIndex = (_currentPieceIndex + 1) % 3;
+    _currentPiece = givePointerInVector();
+};
 
 SimpleApp::RenderObject::RenderObject(const std::shared_ptr<Program> &prog, const std::shared_ptr<Piece> &piece) : m_prog(prog), m_piece(piece) {}
 
