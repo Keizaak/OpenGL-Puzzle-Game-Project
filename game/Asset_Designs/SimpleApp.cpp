@@ -29,8 +29,9 @@ SimpleApp::SimpleApp(int windowWidth, int windowHeight)
     }
 
     if (m_pieces.size() != 0){
-      _currentPiece = givePointerInVector();
       nb_piece = m_pieces.size();
+      _currentPieceIndex = nb_piece - 1;
+      _currentPiece = givePointerInVector();
     }
 }
 
@@ -113,7 +114,7 @@ void SimpleApp::movePiece(Direction direction) {
 }
 
 void SimpleApp::changeCurrentPiece(){
-    _currentPieceIndex = (_currentPieceIndex + 1) % nb_piece;
+    _currentPieceIndex = (_currentPieceIndex - 1) % nb_piece;
     _currentPiece = givePointerInVector();
 };
 
