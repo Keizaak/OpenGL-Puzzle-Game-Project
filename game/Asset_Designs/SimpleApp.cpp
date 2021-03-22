@@ -50,7 +50,6 @@ void SimpleApp::renderFrame() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     for (const auto &shape : m_shapes) {
-      std::cout <<  << std::endl;
       shape->draw();
     }
 
@@ -132,6 +131,7 @@ SimpleApp::RenderObject::createInstance(const std::shared_ptr<Program> &prog, co
 }
 
 void SimpleApp::RenderObject::draw(GLenum mode) const {
+
     if (m_prog) {
         m_prog->bind();
         updateProgram();
@@ -149,7 +149,12 @@ void SimpleApp::RenderObject::draw(GLenum mode) const {
 }
 
 void SimpleApp::RenderObject::updateProgram() const {
-    m_prog->setUniform("M", m_piece->getModel());
+    if (m_piece){
+      m_prog->setUniform("M", m_piece->getModel());
+    }
+    else{
+      m_prog->setUniform("M", glm::scale(glm::mat4(1), glm::vec3(0.01, 0.01, 1)));
+    }
 }
 
 std::shared_ptr<Piece> SimpleApp::RenderObject::getPiece() {
