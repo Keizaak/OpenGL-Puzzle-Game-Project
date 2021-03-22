@@ -5,6 +5,7 @@
 
 Shape::Shape() : _vao(2)
 {
+  generateVAOFromMatrix();
 }
 
 void Shape::setColorVBO(std::vector<glm::vec3> const & VBO) {
@@ -136,6 +137,40 @@ void Shape::generateVAOFromMatrix () {
     for (auto & i : tilesOccupied) {
         for (unsigned int deltax = 0; deltax <=1; deltax++) {
             for (unsigned int deltay = 0; deltay <=1; deltay++) {
+
+                vecToPushBackinPositionVBO = glm::vec2(2 * (i[0] + (float)deltax) - 1 ,-(2 * (i[1] + (float)deltay) - 1));
+                if(positionInVBO(vecToPushBackinPositionVBO, positionVBO) != -1) {
+                  square_index[2 * deltax + deltay] = positionInVBO(vecToPushBackinPositionVBO, positionVBO);
+                }
+                if(positionInVBO(vecToPushBackinPositionVBO, positionVBO) == -1) {
+                  positionVBO.emplace_back(vecToPushBackinPositionVBO);
+                  square_index[2 * deltax + deltay] = index;
+                  index++;
+                  colorVBO.emplace_back(colorVector);
+                }
+            }
+        }
+      IBO.emplace_back(square_index[0]);
+      IBO.emplace_back(square_index[1]);
+      IBO.emplace_back(square_index[2]);
+      IBO.emplace_back(square_index[1]);
+      IBO.emplace_back(square_index[2]);
+      IBO.emplace_back(square_index[3]);
+    }
+  _vao.setVBO(0, positionVBO);
+  _vao.setVBO(1, colorVBO);
+  _vao.setIBO(IBO);
+  std::cout<<"Salut"<<std::endl;
+  print2dVBO(positionVBO,2);
+}
+
+
+
+
+
+
+
+/*
                 if (width > height) {
                     vecToPushBackinPositionVBO = glm::vec2(
                             (i[0] + (float)deltax)*(2.0/width) - 1,
@@ -174,7 +209,7 @@ void Shape::generateVAOFromMatrix () {
     _vao.setIBO(IBO);
 
 }
-
+*/
 void Shape::draw(GLenum mode) {
     _vao.draw(mode);
 }

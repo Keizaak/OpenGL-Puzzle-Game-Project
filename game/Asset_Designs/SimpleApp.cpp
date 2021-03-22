@@ -15,6 +15,8 @@ SimpleApp::SimpleApp(int windowWidth, int windowHeight)
 
     _currentPieceIndex = 2;
 
+    std::shared_ptr<Shape> shape(new Shape());
+
     std::shared_ptr<Piece> corner(new Piece(BIG_L));
     std::shared_ptr<Piece> small_rod(new Piece(RECTANGLE_1X2));
     std::shared_ptr<Piece> big_rod(new Piece(RECTANGLE_3X1));
