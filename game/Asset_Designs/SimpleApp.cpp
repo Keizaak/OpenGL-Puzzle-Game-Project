@@ -7,13 +7,13 @@
 
 SimpleApp::SimpleApp(int windowWidth, int windowHeight)
         : Application(windowWidth, windowHeight, "Puzzle Game"),
-          m_program(new Program("shaders/game.v.glsl", "shaders/game.f.glsl")) {
+          m_program(new Program("shaders/game.v.glsl", "shaders/game.f.glsl")), _currentPieceIndex(1) ,nb_piece(0) {
 
     GLFWwindow * window = glfwGetCurrentContext();
     glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
     resize(window, windowWidth, windowHeight);
 
-    _currentPieceIndex = 2;
+    std::shared_ptr<Shape> shape(new Shape());
 
     std::shared_ptr<Piece> corner(new Piece(BIG_L));
     std::shared_ptr<Piece> small_rod(new Piece(RECTANGLE_1X2));
@@ -21,11 +21,17 @@ SimpleApp::SimpleApp(int windowWidth, int windowHeight)
     corner->setScale(0.05);
     small_rod->setScale(0.05);
     big_rod->setScale(0.05);
-    makeA2DShape(corner);
-    makeA2DShape(big_rod);
-    makeA2DShape(small_rod);
 
-    _currentPiece = givePointerInVector();
+    makeA2DShape(shape);
+
+    //makeA2DShape(corner);
+    //makeA2DShape(big_rod);
+    //makeA2DShape(small_rod);
+
+    if (m_pieces.size() != 0){
+      _currentPiece = givePointerInVector();
+      nb_piece = m_pieces.size();
+    }
 }
 
 std::shared_ptr<SimpleApp::RenderObject> SimpleApp::givePointerInVector(){
@@ -36,8 +42,17 @@ void SimpleApp::makeA2DShape(std::shared_ptr<Piece> piece) {
     m_pieces.push_back(RenderObject::createInstance(m_program, piece));
 }
 
+void SimpleApp::makeA2DShape(std::shared_ptr<Shape> shape) {
+  m_shapes.push_back(RenderObject::createInstance(m_program, shape));
+}
+
 void SimpleApp::renderFrame() {
     glClear(GL_COLOR_BUFFER_BIT);
+
+    for (const auto &shape : m_shapes) {
+      std::cout <<  << std::endl;
+      shape->draw();
+    }
 
     for (const auto &piece : m_pieces) {
         piece->draw();
@@ -73,7 +88,9 @@ void SimpleApp::keyCallback(GLFWwindow *window, int key, int /*scancode*/, int a
         } else if (key == GLFW_KEY_E || key == GLFW_KEY_KP_1) {
             app.rotatePiece(0);
         }else if (key == GLFW_KEY_SPACE){
+          if (app.nb_piece > 1){
             app.changeCurrentPiece();
+          }
         } else {
             Direction direction = getDirectionFromKeyboard(key);
             if (direction != Direction::NONE) {
@@ -97,22 +114,36 @@ void SimpleApp::movePiece(Direction direction) {
 }
 
 void SimpleApp::changeCurrentPiece(){
-    _currentPieceIndex = (_currentPieceIndex + 1) % 3;
+    _currentPieceIndex = (_currentPieceIndex + 1) % nb_piece;
     _currentPiece = givePointerInVector();
 };
 
 SimpleApp::RenderObject::RenderObject(const std::shared_ptr<Program> &prog, const std::shared_ptr<Piece> &piece) : m_prog(prog), m_piece(piece) {}
+SimpleApp::RenderObject::RenderObject(const std::shared_ptr<Program> &prog, const std::shared_ptr<Shape> &shape) : m_prog(prog), m_shape(shape) {}
 
 std::shared_ptr<SimpleApp::RenderObject>
 SimpleApp::RenderObject::createInstance(const std::shared_ptr<Program> &prog, const std::shared_ptr<Piece> &piece) {
     return std::shared_ptr<RenderObject>(new RenderObject(prog, piece));
 }
 
+std::shared_ptr<SimpleApp::RenderObject>
+SimpleApp::RenderObject::createInstance(const std::shared_ptr<Program> &prog, const std::shared_ptr<Shape> &shape) {
+  return std::shared_ptr<RenderObject>(new RenderObject(prog, shape));
+}
+
 void SimpleApp::RenderObject::draw(GLenum mode) const {
-    if (m_piece and m_prog) {
+    if (m_prog) {
         m_prog->bind();
         updateProgram();
-        m_piece->draw(mode);
+        if (m_piece){
+          m_piece->draw(mode);
+        }
+        else if (m_shape){
+         m_shape->draw(mode);
+        }
+        else{
+          std::cerr << "No object to draw" << std::endl;
+        }
         m_prog->unbind();
     }
 }

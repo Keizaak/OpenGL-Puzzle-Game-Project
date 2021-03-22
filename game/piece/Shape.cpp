@@ -5,6 +5,8 @@
 
 Shape::Shape() : _vao(2)
 {
+  generateVAOFromMatrix();
+  yolo = 1;
 }
 
 void Shape::setColorVBO(std::vector<glm::vec3> const & VBO) {
@@ -22,7 +24,7 @@ void Shape::setIBO(std::vector<uint> const & IBO) {
 
 glm::vec3 Shape::generateRandomColorVector() {
     glm::vec3 colorVector;
-    colorVector = {0.8,0,0};
+    colorVector = {0.5,0.5,0.5};
     /* @TODO gérer l'aléatoire + hsv format */
     //colorVector = {rand()/RAND_MAX,1,1};
     return colorVector;

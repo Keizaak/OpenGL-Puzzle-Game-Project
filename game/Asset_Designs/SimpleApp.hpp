@@ -29,8 +29,9 @@ private:
          * @return the created InstancedVAO as a smart pointer
          */
         static std::shared_ptr<RenderObject> createInstance(const std::shared_ptr<Program> & prog, const std::shared_ptr<Piece> & piece);
+        static std::shared_ptr<RenderObject> createInstance(const std::shared_ptr<Program> & prog, const std::shared_ptr<Shape> & shape);
 
-        /**
+      /**
          * @brief Draw this VAO
          */
         void draw(GLenum mode = GL_TRIANGLES) const;
@@ -39,6 +40,7 @@ private:
 
     private:
         RenderObject(const std::shared_ptr<Program> & prog, const std::shared_ptr<Piece> & piece);
+        RenderObject(const std::shared_ptr<Program> & prog, const std::shared_ptr<Shape> & piece);
 
         /**
          * @brief update the program M uniform variable
@@ -47,16 +49,20 @@ private:
 
     private:
         std::shared_ptr<Program> m_prog; ///< Program
-        std::shared_ptr<Piece> m_piece;      ///< Piece
+        std::shared_ptr<Piece> m_piece;   ///< Piece
+        std::shared_ptr<Shape> m_shape;
     };
 
 private:
-    std::vector<std::shared_ptr<RenderObject>> m_pieces; ///< List of instanced VAOs (VAO + modelView matrix)
+    std::vector<std::shared_ptr<RenderObject>> m_pieces; ///< List of instanced Pieces (VAO + modelView matrix)
+    std::vector<std::shared_ptr<RenderObject>> m_shapes; ///< list of instanced Shapes (only VAO)
     std::shared_ptr<Program> m_program;                ///< A GLSL progam
     std::shared_ptr<RenderObject> _currentPiece;
     int _currentPieceIndex;
+    int nb_piece;
 
     void makeA2DShape(std::shared_ptr<Piece> piece);
+    void makeA2DShape(std::shared_ptr<Shape> shape);
     static void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
     void rotatePiece(int direction);
     void movePiece(Direction direction);
