@@ -160,56 +160,8 @@ void Shape::generateVAOFromMatrix () {
   _vao.setVBO(0, positionVBO);
   _vao.setVBO(1, colorVBO);
   _vao.setIBO(IBO);
-  std::cout<<"Salut"<<std::endl;
-  print2dVBO(positionVBO,2);
 }
 
-
-
-
-
-
-
-/*
-                if (width > height) {
-                    vecToPushBackinPositionVBO = glm::vec2(
-                            (i[0] + (float)deltax)*(2.0/width) - 1,
-                            ((i[1] + (float)deltay)*(2.0/width) - 1  +  (((float)width-(float)height)/(float)width)  )
-                    );
-                } else {
-                    vecToPushBackinPositionVBO = glm::vec2(
-                            ((i[0] + (float)deltax)*(2.0/height) - 1  +  (((float)height-(float)width)/(float)height)  ),
-                            (i[1] + (float)deltay)*(2.0/height) - 1
-                    );
-                }
-                std::cout<< vecToPushBackinPositionVBO[0] << " " << vecToPushBackinPositionVBO[1] << std::endl;
-                if(positionInVBO(vecToPushBackinPositionVBO, positionVBO) != -1) {
-                    square_index[2 * deltax + deltay] = positionInVBO(vecToPushBackinPositionVBO, positionVBO);
-                }
-                if(positionInVBO(vecToPushBackinPositionVBO, positionVBO) == -1) {
-                    positionVBO.emplace_back(vecToPushBackinPositionVBO);
-                    square_index[2 * deltax + deltay] = index;
-                    index++;
-                    colorVBO.emplace_back(colorVector);
-                }
-            }
-        }
-        IBO.emplace_back(square_index[0]);
-        IBO.emplace_back(square_index[1]);
-        IBO.emplace_back(square_index[2]);
-        IBO.emplace_back(square_index[1]);
-        IBO.emplace_back(square_index[2]);
-        IBO.emplace_back(square_index[3]);
-    }
-    std::cout << "Color VBO" << std::endl;
-    print3dVBO(colorVBO, 3);
-    std::cout << "Color VBO" << std::endl;
-    _vao.setVBO(0, positionVBO);
-    _vao.setVBO(1, colorVBO);
-    _vao.setIBO(IBO);
-
-}
-*/
 void Shape::draw(GLenum mode) {
     _vao.draw(mode);
 }
