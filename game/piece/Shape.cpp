@@ -23,9 +23,8 @@ void Shape::setIBO(std::vector<uint> const & IBO) {
 
 glm::vec3 Shape::generateRandomColorVector() {
     glm::vec3 colorVector;
-    colorVector = {0.8,0,0};
     /* @TODO gérer l'aléatoire + hsv format */
-    //colorVector = {rand()/RAND_MAX,1,1};
+    colorVector = {1.0*rand()/RAND_MAX,1.0*rand()/RAND_MAX,1.0*rand()/RAND_MAX};
     return colorVector;
 }
 
@@ -98,7 +97,7 @@ void Shape::generateVAOFromMatrix () {
     std::vector<uint> IBO;
     int index = 0;
     int square_index[4];
-    glm::vec3 colorVector = generateRandomColorVector();
+    glm::vec3 colorVector = {192,192,192};
     int lineNumber = 0;
     int firstLine = 0;
 
