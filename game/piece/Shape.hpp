@@ -5,6 +5,7 @@
 
 class Shape {
 public:
+    int yolo;
     Shape();
     void setPositionVBO(std::vector<glm::vec2> const & VBO);
     void setColorVBO(std::vector<glm::vec3> const & VBO);

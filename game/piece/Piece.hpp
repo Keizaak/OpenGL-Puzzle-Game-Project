@@ -36,7 +36,7 @@ enum Direction {
 
 class Piece : public Shape {
 public:
-    explicit Piece(Piece_Type type);
+    explicit Piece(Piece_Type type, float scale);
 
     glm::mat4 getModel();
     void setScale(float scale);
