@@ -128,7 +128,12 @@ void SimpleApp::movePiece(Direction direction)
 void SimpleApp::changeCurrentPiece(int mode)
 {
   if (mode == 1) {
-    _currentPieceIndex = (_currentPieceIndex - 1) % nb_piece;
+    int tmp = (_currentPieceIndex - 1) % nb_piece;
+
+    if (tmp < 0){
+      tmp += nb_piece;
+    }
+    _currentPieceIndex = tmp;
     _currentPiece = givePointerInVector();
   }
   if (mode == 2) {
