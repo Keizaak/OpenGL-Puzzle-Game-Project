@@ -9,6 +9,7 @@ Piece::Piece(Piece_Type type, float scale)
     _model = glm::mat4(1);
     setScale(scale);
     generateVAOFromMatrix();
+    _isWellPlaced = false;
 }
 
 glm::mat4 Piece::getModel() {
@@ -58,6 +59,7 @@ void Piece::changeModelMatrix() {
     _model = glm::translate(glm::mat4(1), glm::vec3(_translationVector, 0));
     _model = glm::rotate(_model, convertAngleToRadian(),glm::vec3(0, 0, 1));
     _model = glm::scale(_model, glm::vec3(_scale, _scale, 1));
+    changeSquarePosition();
 }
 
 void Piece::generateVAOFromMatrix () {
@@ -111,7 +113,11 @@ void Piece::generateVAOFromMatrix () {
     for (auto & i : tilesOccupied) {
         for (unsigned int deltax = 0; deltax <=1; deltax++) {
             for (unsigned int deltay = 0; deltay <=1; deltay++) {
+
                 vecToPushBackinPositionVBO = glm::vec2(2 * (i[0] + (float)deltax) - 1 ,-(2 * (i[1] + (float)deltay) - 1));
+                if (deltax == 0 && deltay == 0) {
+                  _squarePositions.emplace_back(glm::vec2(2 * (i[0] + (float)deltax) - 1 ,-(2 * (i[1] + (float)deltay) - 1)));
+                }
                 if(positionInVBO(vecToPushBackinPositionVBO, positionVBO) != -1) {
                     square_index[2 * deltax + deltay] = positionInVBO(vecToPushBackinPositionVBO, positionVBO);
                 }
@@ -133,4 +139,18 @@ void Piece::generateVAOFromMatrix () {
     _vao.setVBO(0, positionVBO);
     _vao.setVBO(1, colorVBO);
     _vao.setIBO(IBO);
+
+}
+void Piece::changeSquarePosition() {
+  std::vector<glm::vec4> homogeneCoordinates = coordinateToHomogene(_squareOriginsPositions);
+  homogeneCoordinates = matrixTransformation(homogeneCoordinates);
+  _squarePositions = homogeneToCoordinate(homogeneCoordinates);
+}
+
+std::vector<glm::vec4> Piece::matrixTransformation(std::vector<glm::vec4> vect) {
+  std::vector<glm::vec4> res;
+  for (auto &i : vect) {
+    res.push_back(_model * i);
+  }
+  return res;
 }

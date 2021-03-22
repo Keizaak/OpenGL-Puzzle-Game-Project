@@ -70,6 +70,13 @@ private:
     void movePiece(Direction direction);
     std::shared_ptr<RenderObject> givePointerInVector();
     void changeCurrentPiece(int mode);
+
+    bool squareCollision(glm::vec2 square1, glm::vec2 square2);
+    bool shapeCollision(const std::shared_ptr<Shape>& shape1, const std::shared_ptr<Shape>& shape2);
+    bool allShapesCollision();
+
+
+
 };
 
 #endif // GLITTER_SIMPLEAPP_HPP
