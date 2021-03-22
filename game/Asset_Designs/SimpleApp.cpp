@@ -153,7 +153,7 @@ void SimpleApp::RenderObject::updateProgram() const {
       m_prog->setUniform("M", m_piece->getModel());
     }
     else{
-      m_prog->setUniform("M", glm::scale(glm::mat4(1), glm::vec3(0.01, 0.01, 1)));
+      m_prog->setUniform("M", glm::scale(glm::mat4(1), glm::vec3(0.05, 0.05, 1)));
     }
 }
 
