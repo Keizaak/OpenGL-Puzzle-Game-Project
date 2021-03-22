@@ -69,7 +69,7 @@ private:
     void rotatePiece(int direction);
     void movePiece(Direction direction);
     std::shared_ptr<RenderObject> givePointerInVector();
-    void changeCurrentPiece();
+    void changeCurrentPiece(int mode);
 };
 
 #endif // GLITTER_SIMPLEAPP_HPP
