@@ -29,7 +29,7 @@ private:
          * @return the created InstancedVAO as a smart pointer
          */
         static std::shared_ptr<RenderObject> createInstance(const std::shared_ptr<Program> & prog, const std::shared_ptr<Piece> & piece);
-        static std::shared_ptr<RenderObject> createInstance(const std::shared_ptr<Program> & prog, const std::shared_ptr<Shape> & shape);
+        static std::shared_ptr<RenderObject> createInstance(const std::shared_ptr<Program> & prog, const std::shared_ptr<Shape> & shape, float scale);
 
       /**
          * @brief Draw this VAO
@@ -40,7 +40,7 @@ private:
 
     private:
         RenderObject(const std::shared_ptr<Program> & prog, const std::shared_ptr<Piece> & piece);
-        RenderObject(const std::shared_ptr<Program> & prog, const std::shared_ptr<Shape> & piece);
+        RenderObject(const std::shared_ptr<Program> & prog, const std::shared_ptr<Shape> & shape, float scale);
 
         /**
          * @brief update the program M uniform variable
@@ -51,6 +51,7 @@ private:
         std::shared_ptr<Program> m_prog; ///< Program
         std::shared_ptr<Piece> m_piece;   ///< Piece
         std::shared_ptr<Shape> m_shape;
+        float _scale;
     };
 
 private:
@@ -60,6 +61,7 @@ private:
     std::shared_ptr<RenderObject> _currentPiece;
     int _currentPieceIndex;
     int nb_piece;
+    float _scale;
 
     void makeA2DShape(std::shared_ptr<Piece> piece);
     void makeA2DShape(std::shared_ptr<Shape> shape);

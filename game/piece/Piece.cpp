@@ -1,8 +1,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Piece.hpp"
 
-Piece::Piece(Piece_Type type)
-    : _type(type)
+Piece::Piece(Piece_Type type, float scale)
+    : _type(type), _scale(scale)
 {
     _angle = 0;
     _scale = 1;

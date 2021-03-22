@@ -13,20 +13,22 @@ SimpleApp::SimpleApp(int windowWidth, int windowHeight)
     glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
     resize(window, windowWidth, windowHeight);
 
+    _scale = 0.05;
+
     std::shared_ptr<Shape> shape(new Shape());
 
-    std::shared_ptr<Piece> corner(new Piece(BIG_L));
-    std::shared_ptr<Piece> small_rod(new Piece(RECTANGLE_1X2));
-    std::shared_ptr<Piece> big_rod(new Piece(RECTANGLE_3X1));
+    std::shared_ptr<Piece> corner(new Piece(BIG_L,_scale));
+    std::shared_ptr<Piece> small_rod(new Piece(RECTANGLE_1X2,_scale));
+    std::shared_ptr<Piece> big_rod(new Piece(RECTANGLE_3X1,_scale));
     corner->setScale(0.05);
     small_rod->setScale(0.05);
     big_rod->setScale(0.05);
 
     makeA2DShape(shape);
 
-    //makeA2DShape(corner);
-    //makeA2DShape(big_rod);
-    //makeA2DShape(small_rod);
+    makeA2DShape(corner);
+    makeA2DShape(big_rod);
+    makeA2DShape(small_rod);
 
     if (m_pieces.size() != 0){
       _currentPiece = givePointerInVector();
@@ -43,7 +45,7 @@ void SimpleApp::makeA2DShape(std::shared_ptr<Piece> piece) {
 }
 
 void SimpleApp::makeA2DShape(std::shared_ptr<Shape> shape) {
-  m_shapes.push_back(RenderObject::createInstance(m_program, shape));
+  m_shapes.push_back(RenderObject::createInstance(m_program, shape, _scale));
 }
 
 void SimpleApp::renderFrame() {
@@ -118,7 +120,7 @@ void SimpleApp::changeCurrentPiece(){
 };
 
 SimpleApp::RenderObject::RenderObject(const std::shared_ptr<Program> &prog, const std::shared_ptr<Piece> &piece) : m_prog(prog), m_piece(piece) {}
-SimpleApp::RenderObject::RenderObject(const std::shared_ptr<Program> &prog, const std::shared_ptr<Shape> &shape) : m_prog(prog), m_shape(shape) {}
+SimpleApp::RenderObject::RenderObject(const std::shared_ptr<Program> &prog, const std::shared_ptr<Shape> &shape, float scale) : m_prog(prog), m_shape(shape), _scale(scale) {}
 
 std::shared_ptr<SimpleApp::RenderObject>
 SimpleApp::RenderObject::createInstance(const std::shared_ptr<Program> &prog, const std::shared_ptr<Piece> &piece) {
@@ -126,8 +128,8 @@ SimpleApp::RenderObject::createInstance(const std::shared_ptr<Program> &prog, co
 }
 
 std::shared_ptr<SimpleApp::RenderObject>
-SimpleApp::RenderObject::createInstance(const std::shared_ptr<Program> &prog, const std::shared_ptr<Shape> &shape) {
-  return std::shared_ptr<RenderObject>(new RenderObject(prog, shape));
+SimpleApp::RenderObject::createInstance(const std::shared_ptr<Program> &prog, const std::shared_ptr<Shape> &shape, float scale) {
+  return std::shared_ptr<RenderObject>(new RenderObject(prog, shape, scale));
 }
 
 void SimpleApp::RenderObject::draw(GLenum mode) const {
@@ -153,7 +155,7 @@ void SimpleApp::RenderObject::updateProgram() const {
       m_prog->setUniform("M", m_piece->getModel());
     }
     else{
-      m_prog->setUniform("M", glm::scale(glm::mat4(1), glm::vec3(0.05, 0.05, 1)));
+      m_prog->setUniform("M", glm::scale(glm::mat4(1), glm::vec3(_scale, _scale, 1)));
     }
 }
 
