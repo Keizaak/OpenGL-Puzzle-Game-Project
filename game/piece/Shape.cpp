@@ -97,7 +97,7 @@ void Shape::generateVAOFromMatrix () {
     std::vector<uint> IBO;
     int index = 0;
     int square_index[4];
-    glm::vec3 colorVector = {192,192,192};
+    glm::vec3 colorVector = {0.5,0.5,0.5};
     int lineNumber = 0;
     int firstLine = 0;
 
