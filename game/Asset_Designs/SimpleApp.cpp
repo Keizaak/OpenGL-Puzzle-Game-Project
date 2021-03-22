@@ -17,18 +17,16 @@ SimpleApp::SimpleApp(int windowWidth, int windowHeight)
 
     std::shared_ptr<Shape> shape(new Shape());
 
-    std::shared_ptr<Piece> corner(new Piece(BIG_L,_scale));
-    std::shared_ptr<Piece> small_rod(new Piece(RECTANGLE_1X2,_scale));
-    std::shared_ptr<Piece> big_rod(new Piece(RECTANGLE_3X1,_scale));
-    corner->setScale(0.05);
-    small_rod->setScale(0.05);
-    big_rod->setScale(0.05);
-
     makeA2DShape(shape);
 
-    makeA2DShape(corner);
-    makeA2DShape(big_rod);
-    makeA2DShape(small_rod);
+    for (int i = 0; i < 4; i++){
+      makeA2DShape(std::shared_ptr<Piece>(new Piece(BIG_V,_scale)));
+      makeA2DShape(std::shared_ptr<Piece>(new Piece(SQUARE_2X2,_scale)));
+      makeA2DShape(std::shared_ptr<Piece>(new Piece(SMALL_T,_scale)));
+      if (i < 2){
+        makeA2DShape(std::shared_ptr<Piece>(new Piece(RECTANGLE_4X1,_scale)));
+      }
+    }
 
     if (m_pieces.size() != 0){
       _currentPiece = givePointerInVector();

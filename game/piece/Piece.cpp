@@ -2,12 +2,12 @@
 #include "Piece.hpp"
 
 Piece::Piece(Piece_Type type, float scale)
-    : _type(type), _scale(scale)
+    : _type(type)
 {
     _angle = 0;
-    _scale = 1;
     _translationVector = glm::vec2(0, 0);
     _model = glm::mat4(1);
+    setScale(scale);
     generateVAOFromMatrix();
 }
 
