@@ -170,7 +170,7 @@ bool SimpleApp::shapeSuperposition(const std::shared_ptr<Shape> & shape1, const 
   for (auto & i : shape1->getSquarePositions()) {
     bool squareInside = false;
     for (auto & j : shape2->getSquarePositions()) {
-      squareInside = (collision || squareCollision(i, j));
+      squareInside = (squareInside || squareCollision(i, j));
     }
     collision = collision && squareInside;
   }
