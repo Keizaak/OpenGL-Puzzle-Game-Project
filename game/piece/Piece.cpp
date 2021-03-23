@@ -57,7 +57,8 @@ float Piece::convertAngleToRadian() {
 }
 
 void Piece::changeModelMatrix() {
-    _model = glm::translate(glm::mat4(1), glm::vec3(_translationVector, 0));
+    _model = glm::translate(glm::mat4(1), glm::vec3(-(_scale*16),-(_scale * 4), 0));
+    _model = glm::translate(_model, glm::vec3(_translationVector, 0));
     _model = glm::rotate(_model, convertAngleToRadian(),glm::vec3(0, 0, 1));
     _model = glm::scale(_model, glm::vec3(_scale, _scale, 1));
     changeSquarePosition();
