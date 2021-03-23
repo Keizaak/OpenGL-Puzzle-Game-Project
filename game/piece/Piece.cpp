@@ -62,8 +62,6 @@ void Piece::changeModelMatrix() {
     _model = glm::scale(_model, glm::vec3(_scale, _scale, 1));
     changeSquarePosition();
     changeSquarePositionAfterRotation();
-    std::cout << "pourquoi?" << std::endl;
-    displayCoordinates2();
 }
 
 void Piece::generateVAOFromMatrix () {
