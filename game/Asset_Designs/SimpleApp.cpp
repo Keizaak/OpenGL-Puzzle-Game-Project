@@ -32,6 +32,7 @@ SimpleApp::SimpleApp(int windowWidth, int windowHeight)
     nb_piece = m_pieces.size();
     _currentPieceIndex = nb_piece - 1;
     _currentPiece = givePointerInVector();
+    _currentPiece->isCurrentPiece = true;
   }
 }
 
@@ -143,11 +144,15 @@ void SimpleApp::changeCurrentPiece(int mode)
       tmp += nb_piece;
     }
     _currentPieceIndex = tmp;
+    _currentPiece->isCurrentPiece = false;
     _currentPiece = givePointerInVector();
+    _currentPiece->isCurrentPiece = true;
   }
   if (mode == 2) {
     _currentPieceIndex = (_currentPieceIndex + 1) % nb_piece;
+    _currentPiece->isCurrentPiece = false;
     _currentPiece = givePointerInVector();
+    _currentPiece->isCurrentPiece = true;
   }
 }
 bool SimpleApp::squareCollision(glm::vec2 square1, glm::vec2 square2) {
@@ -226,14 +231,14 @@ bool SimpleApp::verifVictory()
     count++;
     res = res && piece->getPiece()->_isWellPlaced;
     if (!(piece->getPiece()->_isWellPlaced)){
-      //std::cout << "Pièce " << count << " mal placée" << std::endl;
+      std::cout << "Pièce " << count << " mal placée" << std::endl;
     }
   }
   return res;
 }
 
-SimpleApp::RenderObject::RenderObject(const std::shared_ptr<Program> & prog, const std::shared_ptr<Piece> & piece) : m_prog(prog), m_piece(piece) {}
-SimpleApp::RenderObject::RenderObject(const std::shared_ptr<Program> & prog, const std::shared_ptr<Shape> & shape, float scale) : m_prog(prog), m_shape(shape), _scale(scale) {}
+SimpleApp::RenderObject::RenderObject(const std::shared_ptr<Program> & prog, const std::shared_ptr<Piece> & piece) : m_prog(prog), m_piece(piece), isCurrentPiece(false) {}
+SimpleApp::RenderObject::RenderObject(const std::shared_ptr<Program> & prog, const std::shared_ptr<Shape> & shape, float scale) : m_prog(prog), m_shape(shape), _scale(scale), isCurrentPiece(false) {}
 
 std::shared_ptr<SimpleApp::RenderObject> SimpleApp::RenderObject::createInstance(const std::shared_ptr<Program> & prog, const std::shared_ptr<Piece> & piece)
 {
@@ -265,6 +270,7 @@ void SimpleApp::RenderObject::draw(GLenum mode) const
 void SimpleApp::RenderObject::updateProgram() const
 {
   if (m_piece) {
+    //m_prog->setUniform("I",0);
     m_prog->setUniform("M", m_piece->getModel());
   } else {
     m_prog->setUniform("M", glm::scale(glm::mat4(1), glm::vec3(_scale, _scale, 1)));

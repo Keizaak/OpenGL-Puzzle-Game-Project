@@ -53,6 +53,10 @@ private:
         std::shared_ptr<Piece> m_piece;   ///< Piece
         std::shared_ptr<Shape> m_shape;
         float _scale;
+
+      public:
+        bool isCurrentPiece;
+
     };
 
 private:
