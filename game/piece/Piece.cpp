@@ -7,8 +7,6 @@ Piece::Piece(Piece_Type type, float scale)
     _angle = 0;
     _translationVector = glm::vec2(0, 0);
     _model = glm::mat4(1);
-    _squareOriginsPositions.clear();
-    _squarePositions.clear();
     generateVAOFromMatrix();
     _squareOriginsPositions = _squarePositions;
     setScale(scale);
