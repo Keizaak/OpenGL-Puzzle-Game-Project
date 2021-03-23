@@ -53,8 +53,12 @@ private:
     float _scale;
     glm::vec2 _translationVector;
     glm::mat4 _model;
+    bool _isWellPlaced;
 
     void changeModelMatrix();
+    void changeSquarePosition() override;
+
+    std::vector<glm::vec4> matrixTransformation(std::vector<glm::vec4> vect);
 };
 
 #endif //GLITTER_PIECE_HPP

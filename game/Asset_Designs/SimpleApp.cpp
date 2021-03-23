@@ -118,11 +118,13 @@ void SimpleApp::rotatePiece(int direction)
   } else if (direction == 1) {
     _currentPiece->getPiece()->counterClockwiseRotate();
   }
+  allShapesCollision();
 }
 
 void SimpleApp::movePiece(Direction direction)
 {
   _currentPiece->getPiece()->move(direction);
+  allShapesCollision();
 }
 
 void SimpleApp::changeCurrentPiece(int mode)
@@ -140,7 +142,47 @@ void SimpleApp::changeCurrentPiece(int mode)
     _currentPieceIndex = (_currentPieceIndex + 1) % nb_piece;
     _currentPiece = givePointerInVector();
   }
-};
+}
+bool SimpleApp::squareCollision(glm::vec2 square1, glm::vec2 square2) {
+  return (abs(square1[0] - square2[0]) < EPSILON && abs(square1[1] - square2[1]) < EPSILON);
+}
+
+bool SimpleApp::shapeCollision(const std::shared_ptr<Shape>& shape1, const std::shared_ptr<Shape>& shape2) {
+  bool collision = false;
+  for (auto & i : shape1->getSquarePositions()) {
+    for (auto & j : shape2->getSquarePositions()) {
+      collision = (collision || squareCollision(i, j));
+    }
+  }
+  return collision;
+}
+
+void displayCoordinates(std::vector<glm::vec2> vector)
+{
+  for (auto & o : vector) {
+    std::cout << "(" << o[0] << ", " << o[1] << ")" << std::endl;
+  }
+}
+
+bool SimpleApp::allShapesCollision()
+{
+  int counter = 0;
+  bool collision = false;
+  std::shared_ptr<Piece> Piece2;
+  std::shared_ptr<Piece> currentPiece = _currentPiece->getPiece();
+
+  for (auto &o : m_pieces) {
+    if (o->getPiece() != currentPiece) {
+      bool tmp = shapeCollision(currentPiece, o->getPiece());
+      collision = (collision || tmp);
+      if (tmp){
+        std::cout << "Piece n° " << counter << std::endl;
+      }
+    }
+    counter ++;
+  }
+  return collision;
+}
 
 SimpleApp::RenderObject::RenderObject(const std::shared_ptr<Program> & prog, const std::shared_ptr<Piece> & piece) : m_prog(prog), m_piece(piece) {}
 SimpleApp::RenderObject::RenderObject(const std::shared_ptr<Program> & prog, const std::shared_ptr<Shape> & shape, float scale) : m_prog(prog), m_shape(shape), _scale(scale) {}
