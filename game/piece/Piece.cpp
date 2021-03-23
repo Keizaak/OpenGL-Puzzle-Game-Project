@@ -7,8 +7,12 @@ Piece::Piece(Piece_Type type, float scale)
     _angle = 0;
     _translationVector = glm::vec2(0, 0);
     _model = glm::mat4(1);
-    setScale(scale);
+    _squareOriginsPositions.clear();
+    _squarePositions.clear();
     generateVAOFromMatrix();
+    _squareOriginsPositions = _squarePositions;
+    setScale(scale);
+    _isWellPlaced = false;
 }
 
 glm::mat4 Piece::getModel() {
@@ -58,6 +62,7 @@ void Piece::changeModelMatrix() {
     _model = glm::translate(glm::mat4(1), glm::vec3(_translationVector, 0));
     _model = glm::rotate(_model, convertAngleToRadian(),glm::vec3(0, 0, 1));
     _model = glm::scale(_model, glm::vec3(_scale, _scale, 1));
+    changeSquarePosition();
 }
 
 void Piece::generateVAOFromMatrix () {
@@ -108,10 +113,18 @@ void Piece::generateVAOFromMatrix () {
     int height = maxy - miny + 1;
     int width = maxx - minx + 1;
     glm::vec2 vecToPushBackinPositionVBO;
+    //int counter = 0;
+    //_squarePositions.clear();
     for (auto & i : tilesOccupied) {
         for (unsigned int deltax = 0; deltax <=1; deltax++) {
             for (unsigned int deltay = 0; deltay <=1; deltay++) {
+
                 vecToPushBackinPositionVBO = glm::vec2(2 * (i[0] + (float)deltax) - 1 ,-(2 * (i[1] + (float)deltay) - 1));
+                if (deltax == 0 && deltay == 0) {
+                  //counter++;
+                  _squarePositions.emplace_back(glm::vec2(2 * (i[0] + (float)deltax) - 1 ,-(2 * (i[1] + (float)deltay) - 1)));
+                  //std::cout << counter << " taille : " << _squarePositions.size() << std::endl;
+                }
                 if(positionInVBO(vecToPushBackinPositionVBO, positionVBO) != -1) {
                     square_index[2 * deltax + deltay] = positionInVBO(vecToPushBackinPositionVBO, positionVBO);
                 }
@@ -133,4 +146,34 @@ void Piece::generateVAOFromMatrix () {
     _vao.setVBO(0, positionVBO);
     _vao.setVBO(1, colorVBO);
     _vao.setIBO(IBO);
+
+}
+void displayCoordinates2(std::vector<glm::vec2> vector)
+{
+  for (auto & o : vector) {
+    std::cout << "(" << o[0] << ", " << o[1] << ")" << std::endl;
+  }
+}
+
+void displayCoordinates4(std::vector<glm::vec4> vector)
+{
+  for (auto & o : vector) {
+    std::cout << "(" << o[0] << ", " << o[1] << ", " << o[2] << ", " << o[3] << ")" << std::endl;
+  }
+}
+
+void Piece::changeSquarePosition() {
+  //std::cout << "tailles : " << _squareOriginsPositions.size() << "|" << _squarePositions.size() << std::endl;
+  //displayCoordinates2(_squarePositions);
+  std::vector<glm::vec4> homCoord = matrixTransformation(coordinateToHomogeneV(_squareOriginsPositions));
+  _squarePositions = homogeneToCoordinateV(homCoord);
+}
+
+std::vector<glm::vec4> Piece::matrixTransformation(std::vector<glm::vec4> vect) {
+  std::vector<glm::vec4> res;
+  for (auto &i : vect) {
+    glm::vec4 tmp = _model * i;
+    res.push_back(tmp);
+  }
+  return res;
 }
