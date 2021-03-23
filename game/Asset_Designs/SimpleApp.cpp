@@ -196,7 +196,7 @@ bool SimpleApp::allPiecesCollision()
       bool tmp = shapeCollision(currentPiece, o->getPiece());
       collision = (collision || tmp);
       if (tmp){
-        std::cout << "Collision Piece n° " << counter << std::endl;
+        //std::cout << "Collision Piece n° " << counter << std::endl;
       }
     }
     counter ++;
@@ -208,7 +208,7 @@ bool SimpleApp::currentPieceShapeSuperposition()
 {
   bool collision = shapeSuperposition(_currentPiece->getPiece(),m_shapes.front()->getShape());
   if (!collision) {
-    std::cout << "En dehors du plateau" << std::endl;
+    //std::cout << "En dehors du plateau" << std::endl;
   }
   return collision;
 }
@@ -225,8 +225,8 @@ bool SimpleApp::verifVictory()
   for (auto & piece : m_pieces){
     count++;
     res = res && piece->getPiece()->_isWellPlaced;
-    if (piece->getPiece()->_isWellPlaced){
-      std::cout << "Piece " << count << " bien placée" << std::endl;
+    if (!(piece->getPiece()->_isWellPlaced)){
+      //std::cout << "Pièce " << count << " mal placée" << std::endl;
     }
   }
   return res;
