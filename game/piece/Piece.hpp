@@ -46,6 +46,8 @@ public:
     void move(Direction direction);
     float convertAngleToRadian();
     void generateVAOFromMatrix() override;
+    void displayCoordinates2(std::vector<glm::vec2> vector);
+    void displayCoordinates2();
 
 private:
     Piece_Type _type;
@@ -56,6 +58,7 @@ private:
 
     void changeModelMatrix();
     void changeSquarePosition();
+    void changeSquarePositionAfterRotation();
 
     std::vector<glm::vec4> matrixTransformation(std::vector<glm::vec4> vect);
 };

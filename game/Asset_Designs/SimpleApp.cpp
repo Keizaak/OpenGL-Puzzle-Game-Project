@@ -151,7 +151,7 @@ void SimpleApp::changeCurrentPiece(int mode)
   }
 }
 bool SimpleApp::squareCollision(glm::vec2 square1, glm::vec2 square2) {
-  return (abs(square1[0] - square2[0]) < EPSILON && abs(square1[1] - square2[1]) < EPSILON);
+  return ((abs(square1[0] - square2[0]) < EPSILON) && (abs(square1[1] - square2[1]) < EPSILON));
 }
 
 bool SimpleApp::shapeCollision(const std::shared_ptr<Shape>& shape1, const std::shared_ptr<Shape>& shape2) {

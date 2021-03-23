@@ -3,7 +3,7 @@
 
 #include "glApi.hpp"
 
-#define EPSILON 0.01
+#define EPSILON 0.0001
 
 class Shape {
 public:

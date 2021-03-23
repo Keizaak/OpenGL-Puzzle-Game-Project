@@ -61,6 +61,9 @@ void Piece::changeModelMatrix() {
     _model = glm::rotate(_model, convertAngleToRadian(),glm::vec3(0, 0, 1));
     _model = glm::scale(_model, glm::vec3(_scale, _scale, 1));
     changeSquarePosition();
+    changeSquarePositionAfterRotation();
+    std::cout << "pourquoi?" << std::endl;
+    displayCoordinates2();
 }
 
 void Piece::generateVAOFromMatrix () {
@@ -146,7 +149,11 @@ void Piece::generateVAOFromMatrix () {
     _vao.setIBO(IBO);
 
 }
-void displayCoordinates2(std::vector<glm::vec2> vector)
+void Piece::displayCoordinates2(){
+  displayCoordinates2(_squarePositions);
+}
+
+void Piece::displayCoordinates2(std::vector<glm::vec2> vector)
 {
   for (auto & o : vector) {
     std::cout << "(" << o[0] << ", " << o[1] << ")" << std::endl;
@@ -163,6 +170,26 @@ void displayCoordinates4(std::vector<glm::vec4> vector)
 void Piece::changeSquarePosition() {
   std::vector<glm::vec4> homCoord = matrixTransformation(coordinateToHomogeneV(_squareOriginsPositions));
   _squarePositions = homogeneToCoordinateV(homCoord);
+}
+
+void Piece::changeSquarePositionAfterRotation()
+{
+  std::vector<glm::vec2> newSquarePositions;
+  for (auto & square : _squarePositions) {
+    glm::vec2 tmp(square);
+    if (_angle == 90){
+      tmp[1] = tmp[1] + 2 * _scale;
+    }
+    if (_angle == 180){
+      tmp[0] = tmp[0] - 2 * _scale;
+      tmp[1] = tmp[1] + 2 * _scale;
+    }
+    if (_angle == 270){
+      tmp[0] = tmp[0] - 2 * _scale;
+    }
+    newSquarePositions.push_back(tmp);
+  }
+  _squarePositions = newSquarePositions;
 }
 
 std::vector<glm::vec4> Piece::matrixTransformation(std::vector<glm::vec4> vect) {
