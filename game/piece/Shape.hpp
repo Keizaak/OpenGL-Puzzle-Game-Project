@@ -8,6 +8,7 @@
 class Shape {
 public:
     Shape();
+    Shape(glm::mat4 model);
     void setPositionVBO(std::vector<glm::vec2> const & VBO);
     void setColorVBO(std::vector<glm::vec3> const & VBO);
     void setIBO(std::vector<uint> const & IBO);
@@ -16,6 +17,7 @@ public:
     std::vector<glm::vec2> getSquareOriginsPositions();
     std::vector<glm::vec2> getSquarePositions();
     void setSquarePositions(const std::vector<glm::vec2> & squarePositions);
+
 
   protected:
     VAO _vao;
@@ -36,9 +38,8 @@ public:
     std::vector<glm::vec4> coordinateToHomogeneV(const std::vector<glm::vec2>& normalCoordinates);
     std::vector<glm::vec2> homogeneToCoordinateV(const std::vector<glm::vec4>& homogeneCoordinates);
 
-    virtual void changeSquarePosition();
-
-
+    std::vector<glm::vec4> matrixTransformation(std::vector<glm::vec4> homCoord, glm::mat4 model);
+    void changeSquarePosition(glm::mat4 model);
 
 };
 

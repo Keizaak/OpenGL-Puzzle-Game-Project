@@ -37,7 +37,7 @@ enum Direction {
 class Piece : public Shape {
 public:
     explicit Piece(Piece_Type type, float scale);
-
+    bool _isWellPlaced;
     glm::mat4 getModel();
     void setScale(float scale);
 
@@ -53,10 +53,9 @@ private:
     float _scale;
     glm::vec2 _translationVector;
     glm::mat4 _model;
-    bool _isWellPlaced;
 
     void changeModelMatrix();
-    void changeSquarePosition() override;
+    void changeSquarePosition();
 
     std::vector<glm::vec4> matrixTransformation(std::vector<glm::vec4> vect);
 };

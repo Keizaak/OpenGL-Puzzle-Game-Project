@@ -1,12 +1,13 @@
 #include <fstream>
 #include "Shape.hpp"
 
+Shape::Shape(): _vao(2) {}
 
-
-Shape::Shape() : _vao(2)
+Shape::Shape(glm::mat4 model) : _vao(2)
 {
   generateVAOFromMatrix();
   _squareOriginsPositions = _squarePositions;
+  changeSquarePosition(model);
 }
 
 void Shape::setColorVBO(std::vector<glm::vec3> const & VBO) {
@@ -209,7 +210,16 @@ std::vector<glm::vec2> Shape::homogeneToCoordinateV(const std::vector<glm::vec4>
   }
   return res;
 }
-void Shape::changeSquarePosition() {
-  /* @todo à faire */
+std::vector<glm::vec4> Shape::matrixTransformation(std::vector<glm::vec4> vect, glm::mat4 model){
+  std::vector<glm::vec4> res;
+  for (auto &i : vect) {
+    glm::vec4 tmp = model * i;
+    res.push_back(tmp);
+  }
+  return res;
+}
 
+void Shape::changeSquarePosition(glm::mat4 model) {
+  std::vector<glm::vec4> homCoord = matrixTransformation(coordinateToHomogeneV(_squareOriginsPositions), model);
+  _squarePositions = homogeneToCoordinateV(homCoord);
 }

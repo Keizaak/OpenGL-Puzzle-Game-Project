@@ -163,8 +163,6 @@ void displayCoordinates4(std::vector<glm::vec4> vector)
 }
 
 void Piece::changeSquarePosition() {
-  //std::cout << "tailles : " << _squareOriginsPositions.size() << "|" << _squarePositions.size() << std::endl;
-  //displayCoordinates2(_squarePositions);
   std::vector<glm::vec4> homCoord = matrixTransformation(coordinateToHomogeneV(_squareOriginsPositions));
   _squarePositions = homogeneToCoordinateV(homCoord);
 }
