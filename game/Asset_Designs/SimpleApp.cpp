@@ -13,8 +13,9 @@ SimpleApp::SimpleApp(int windowWidth, int windowHeight)
   resize(window, windowWidth, windowHeight);
 
   _scale = 0.05;
+  _shape_model = glm::scale(glm::mat4(1), glm::vec3(_scale, _scale, 1));
 
-  std::shared_ptr<Shape> shape(new Shape());
+  std::shared_ptr<Shape> shape(new Shape(_shape_model));
 
   makeA2DShape(shape);
 
@@ -118,13 +119,19 @@ void SimpleApp::rotatePiece(int direction)
   } else if (direction == 1) {
     _currentPiece->getPiece()->counterClockwiseRotate();
   }
-  allShapesCollision();
+  updateIsWellPlaced();
+  if (verifVictory()){
+    std::cout << "VICTOIRE!!" << std::endl;
+  }
 }
 
 void SimpleApp::movePiece(Direction direction)
 {
   _currentPiece->getPiece()->move(direction);
-  allShapesCollision();
+  updateIsWellPlaced();
+  if (verifVictory()){
+    std::cout << "VICTOIRE!!" << std::endl;
+  }
 }
 
 void SimpleApp::changeCurrentPiece(int mode)
@@ -144,7 +151,7 @@ void SimpleApp::changeCurrentPiece(int mode)
   }
 }
 bool SimpleApp::squareCollision(glm::vec2 square1, glm::vec2 square2) {
-  return (abs(square1[0] - square2[0]) < EPSILON && abs(square1[1] - square2[1]) < EPSILON);
+  return ((abs(square1[0] - square2[0]) < EPSILON) && (abs(square1[1] - square2[1]) < EPSILON));
 }
 
 bool SimpleApp::shapeCollision(const std::shared_ptr<Shape>& shape1, const std::shared_ptr<Shape>& shape2) {
@@ -157,6 +164,19 @@ bool SimpleApp::shapeCollision(const std::shared_ptr<Shape>& shape1, const std::
   return collision;
 }
 
+bool SimpleApp::shapeSuperposition(const std::shared_ptr<Shape> & shape1, const std::shared_ptr<Shape> & shape2)
+{
+  bool collision = true;
+  for (auto & i : shape1->getSquarePositions()) {
+    bool squareInside = false;
+    for (auto & j : shape2->getSquarePositions()) {
+      squareInside = (squareInside || squareCollision(i, j));
+    }
+    collision = collision && squareInside;
+  }
+  return collision;
+}
+
 void displayCoordinates(std::vector<glm::vec2> vector)
 {
   for (auto & o : vector) {
@@ -164,7 +184,7 @@ void displayCoordinates(std::vector<glm::vec2> vector)
   }
 }
 
-bool SimpleApp::allShapesCollision()
+bool SimpleApp::allPiecesCollision()
 {
   int counter = 0;
   bool collision = false;
@@ -176,12 +196,40 @@ bool SimpleApp::allShapesCollision()
       bool tmp = shapeCollision(currentPiece, o->getPiece());
       collision = (collision || tmp);
       if (tmp){
-        std::cout << "Piece n° " << counter << std::endl;
+        //std::cout << "Collision Piece n° " << counter << std::endl;
       }
     }
     counter ++;
   }
   return collision;
+}
+
+bool SimpleApp::currentPieceShapeSuperposition()
+{
+  bool collision = shapeSuperposition(_currentPiece->getPiece(),m_shapes.front()->getShape());
+  if (!collision) {
+    //std::cout << "En dehors du plateau" << std::endl;
+  }
+  return collision;
+}
+
+void SimpleApp::updateIsWellPlaced()
+{
+  _currentPiece->getPiece()->_isWellPlaced = !allPiecesCollision() && currentPieceShapeSuperposition();
+}
+
+bool SimpleApp::verifVictory()
+{
+  bool res = true;
+  int count = 0;
+  for (auto & piece : m_pieces){
+    count++;
+    res = res && piece->getPiece()->_isWellPlaced;
+    if (!(piece->getPiece()->_isWellPlaced)){
+      //std::cout << "Pièce " << count << " mal placée" << std::endl;
+    }
+  }
+  return res;
 }
 
 SimpleApp::RenderObject::RenderObject(const std::shared_ptr<Program> & prog, const std::shared_ptr<Piece> & piece) : m_prog(prog), m_piece(piece) {}
@@ -226,4 +274,9 @@ void SimpleApp::RenderObject::updateProgram() const
 std::shared_ptr<Piece> SimpleApp::RenderObject::getPiece()
 {
   return m_piece;
+}
+
+std::shared_ptr<Shape> SimpleApp::RenderObject::getShape()
+{
+  return m_shape;
 }

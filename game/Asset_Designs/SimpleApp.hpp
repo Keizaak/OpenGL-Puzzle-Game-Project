@@ -37,6 +37,7 @@ private:
         void draw(GLenum mode = GL_TRIANGLES) const;
 
         std::shared_ptr<Piece> getPiece();
+        std::shared_ptr<Shape> getShape();
 
     private:
         RenderObject(const std::shared_ptr<Program> & prog, const std::shared_ptr<Piece> & piece);
@@ -59,6 +60,7 @@ private:
     std::vector<std::shared_ptr<RenderObject>> m_shapes; ///< list of instanced Shapes (only VAO)
     std::shared_ptr<Program> m_program;                ///< A GLSL progam
     std::shared_ptr<RenderObject> _currentPiece;
+    glm::mat4 _shape_model;
     int _currentPieceIndex;
     int nb_piece;
     float _scale;
@@ -73,8 +75,13 @@ private:
 
     bool squareCollision(glm::vec2 square1, glm::vec2 square2);
     bool shapeCollision(const std::shared_ptr<Shape>& shape1, const std::shared_ptr<Shape>& shape2);
-    bool allShapesCollision();
+    //check if shape1 is superposed on shape2
+    bool shapeSuperposition(const std::shared_ptr<Shape>& shape1, const std::shared_ptr<Shape>& shape2);
+    bool allPiecesCollision();
+    bool currentPieceShapeSuperposition();
 
+    void updateIsWellPlaced();
+    bool verifVictory();
 
 
 };
