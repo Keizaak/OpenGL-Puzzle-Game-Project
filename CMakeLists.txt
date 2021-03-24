@@ -45,7 +45,7 @@ set(UTILS_SRC src/glApi.hpp
               src/utils.cpp
               src/Serialize.hpp
               src/Serialize.cpp
-              src/AttributeProperties.hpp game/Asset_Designs/SimpleApp.cpp game/Asset_Designs/SimpleApp.hpp)
+              src/AttributeProperties.hpp game/application/GameApplication.cpp game/application/GameApplication.hpp)
 add_library(utils ${UTILS_SRC})
 
 # +------------------------------------------------------------------+
@@ -54,61 +54,17 @@ add_library(utils ${UTILS_SRC})
 
 file(GLOB GLSLFiles shaders/*.glsl)
 
-add_executable(glitter
-  examples/PA1Application.hpp
-  examples/PA1Application.cpp
-  examples/PA2Application.hpp
-  examples/PA2Application.cpp
-  examples/PA3Application.hpp
-  examples/PA3Application.cpp
-  examples/PA4Application.hpp
-  examples/PA4Application.cpp
-  examples/PA5Application.hpp
-  examples/PA5Application.cpp
-        #examples/old_main.cpp
+add_executable(puzzle
   ${GLSLFiles}
   game/main.cpp
   game/keyboard/command.cpp
   game/keyboard/command.h
-  game/GameApplication.cpp
-  game/Asset_Designs/SimpleApp.cpp
-  game/Asset_Designs/SimpleApp.hpp
+  game/application/GameApplication.cpp
+  game/application/GameApplication.hpp
   game/piece/Piece.cpp
-        game/piece/Shape.cpp game/piece/Shape.hpp)
-target_link_libraries(glitter utils ${GLFW3_LIBRARIES} ${GLEW_LIBRARIES})
-
-# +------------------------------------------------------------------+
-# |  rubik's cube                                                    |
-# +------------------------------------------------------------------+
-add_executable(rubik
-  rubik/main.cpp
-  rubik/RubikApplication.hpp
-  rubik/RubikApplication.cpp
-  rubik/RubikRenderer.hpp
-  rubik/RubikRenderer.cpp
-  rubik/RubikLogic.hpp
-  rubik/RubikLogic.cpp
-  rubik/GameStage.hpp
-  rubik/GameStage.cpp
-  rubik/TextPrinter.hpp
-  rubik/TextPrinter.cpp
-  rubik/rubik.v.glsl
-  rubik/rubik.f.glsl
-  rubik/font.v.glsl
-  rubik/font.f.glsl
-  rubik/hud.v.glsl
-  rubik/hud.f.glsl
-  )
-target_link_libraries(rubik utils ${GLFW3_LIBRARIES} ${GLEW_LIBRARIES})
-
-# +------------------------------------------------------------------+
-# |  obj2glitter file converter                                      |
-# +------------------------------------------------------------------+
-
-add_executable(obj2glitter
-  examples/obj2glitter.cpp
-  )
-target_link_libraries(obj2glitter utils ${GLEW_LIBRARIES})
+  game/piece/Shape.cpp
+  game/piece/Shape.hpp)
+target_link_libraries(puzzle utils ${GLFW3_LIBRARIES} ${GLEW_LIBRARIES})
 
 # +------------------------------------------------------------------+
 # |  Doxygen Generation                                              |

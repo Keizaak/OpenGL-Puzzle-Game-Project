@@ -1,16 +1,11 @@
 #include "glApi.hpp"
-#include "GameApplication.hpp"
-#include "Asset_Designs/SimpleApp.hpp"
+#include "application/GameApplication.hpp"
 
-int main(int argc, char * argv[]) {
-//    GameApplication * application = new GameApplication(500, 500);
-//    application->setCallbacks();
-//    application->mainLoop();
-//    delete application;
+int main() {
 
-    srand( time( NULL ) );
+    srand(time(nullptr));
 
-    SimpleApp * application = new SimpleApp(500, 500);
+    auto *application = new GameApplication(500, 500);
     application->setCallbacks();
     application->mainLoop();
     delete application;

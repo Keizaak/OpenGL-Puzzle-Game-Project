@@ -36,18 +36,23 @@ enum Direction {
 
 class Piece : public Shape {
 public:
-    explicit Piece(Piece_Type type, float scale);
     bool _isWellPlaced;
+
+    explicit Piece(Piece_Type type, float scale);
+
     glm::mat4 getModel();
+
     void setScale(float scale);
 
     void clockwiseRotate();
+
     void counterClockwiseRotate();
+
     void move(Direction direction);
-    float convertAngleToRadian();
+
+    float convertAngleToRadian() const;
+
     void generateVAOFromMatrix() override;
-    void displayCoordinates2(std::vector<glm::vec2> vector);
-    void displayCoordinates2();
 
 private:
     Piece_Type _type;
@@ -57,10 +62,12 @@ private:
     glm::mat4 _model;
 
     void changeModelMatrix();
+
     void changeSquarePosition();
+
     void changeSquarePositionAfterRotation();
 
-    std::vector<glm::vec4> matrixTransformation(std::vector<glm::vec4> vect);
+    std::vector<glm::vec4> matrixTransformation(const std::vector<glm::vec4> &vect);
 };
 
 #endif //GLITTER_PIECE_HPP

@@ -2,8 +2,7 @@
 #include "Piece.hpp"
 
 Piece::Piece(Piece_Type type, float scale)
-    : _type(type)
-{
+        : _type(type) {
     _angle = 0;
     _translationVector = glm::vec2(0, 0);
     _model = glm::mat4(1);
@@ -52,23 +51,23 @@ void Piece::move(Direction direction) {
     changeModelMatrix();
 }
 
-float Piece::convertAngleToRadian() {
-    return static_cast<float>(_angle * 2 * M_PI /360.);
+float Piece::convertAngleToRadian() const {
+    return static_cast<float>(_angle * 2 * M_PI / 360.);
 }
 
 void Piece::changeModelMatrix() {
-    _model = glm::translate(glm::mat4(1), glm::vec3(-(_scale*16),-(_scale * 4), 0));
+    _model = glm::translate(glm::mat4(1), glm::vec3(-(_scale * 16), -(_scale * 4), 0));
     _model = glm::translate(_model, glm::vec3(_translationVector, 0));
-    _model = glm::rotate(_model, convertAngleToRadian(),glm::vec3(0, 0, 1));
+    _model = glm::rotate(_model, convertAngleToRadian(), glm::vec3(0, 0, 1));
     _model = glm::scale(_model, glm::vec3(_scale, _scale, 1));
     changeSquarePosition();
     changeSquarePositionAfterRotation();
 }
 
-void Piece::generateVAOFromMatrix () {
+void Piece::generateVAOFromMatrix() {
     std::string lineBuffer;
     std::ifstream file("../game/piece/pieces_file.txt");
-    if (!file.is_open()){
+    if (!file.is_open()) {
         std::cerr << "Error: " << strerror(errno) << std::endl;
     }
     std::vector<glm::vec2> positionVBO;
@@ -79,7 +78,7 @@ void Piece::generateVAOFromMatrix () {
     int square_index[4];
     glm::vec3 colorVector = generateRandomColorVector();
     int lineNumber = 0;
-    int firstLine = 4 * (int)_type;
+    int firstLine = 4 * (int) _type;
 
     while (lineNumber != firstLine && getline(file, lineBuffer)) {
         lineNumber++;
@@ -87,12 +86,13 @@ void Piece::generateVAOFromMatrix () {
     if (lineNumber != firstLine) {
         std::cout << "Reading file error" << std::endl;
     }
+
     int minx = 4, maxx = 0, miny = 4, maxy = 0;
     for (lineNumber = 0; lineNumber <= 3; lineNumber++) {
         getline(file, lineBuffer);
         for (int columnNumber = 0; columnNumber <= 3; columnNumber++) {
             if (lineBuffer.at(columnNumber) == '1') {
-                tilesOccupied.emplace_back(columnNumber,lineNumber);
+                tilesOccupied.emplace_back(columnNumber, lineNumber);
 
                 if (lineNumber < miny) {
                     miny = lineNumber;
@@ -109,26 +109,22 @@ void Piece::generateVAOFromMatrix () {
             }
         }
     }
-    file.close();
-    int height = maxy - miny + 1;
-    int width = maxx - minx + 1;
-    glm::vec2 vecToPushBackinPositionVBO;
-    //int counter = 0;
-    //_squarePositions.clear();
-    for (auto & i : tilesOccupied) {
-        for (unsigned int deltax = 0; deltax <=1; deltax++) {
-            for (unsigned int deltay = 0; deltay <=1; deltay++) {
 
-                vecToPushBackinPositionVBO = glm::vec2(2 * (i[0] + (float)deltax) - 1 ,-(2 * (i[1] + (float)deltay) - 1));
+    file.close();
+    glm::vec2 vecToPushBackinPositionVBO;
+    for (auto &i : tilesOccupied) {
+        for (unsigned int deltax = 0; deltax <= 1; deltax++) {
+            for (unsigned int deltay = 0; deltay <= 1; deltay++) {
+                vecToPushBackinPositionVBO = glm::vec2(2 * (i[0] + (float) deltax) - 1,
+                                                       -(2 * (i[1] + (float) deltay) - 1));
                 if (deltax == 0 && deltay == 0) {
-                  //counter++;
-                  _squarePositions.emplace_back(glm::vec2(2 * (i[0] + (float)deltax) - 1 ,-(2 * (i[1] + (float)deltay) - 1)));
-                  //std::cout << counter << " taille : " << _squarePositions.size() << std::endl;
+                    _squarePositions.emplace_back(
+                            glm::vec2(2 * (i[0] + (float) deltax) - 1, -(2 * (i[1] + (float) deltay) - 1)));
                 }
-                if(positionInVBO(vecToPushBackinPositionVBO, positionVBO) != -1) {
+                if (positionInVBO(vecToPushBackinPositionVBO, positionVBO) != -1) {
                     square_index[2 * deltax + deltay] = positionInVBO(vecToPushBackinPositionVBO, positionVBO);
                 }
-                if(positionInVBO(vecToPushBackinPositionVBO, positionVBO) == -1) {
+                if (positionInVBO(vecToPushBackinPositionVBO, positionVBO) == -1) {
                     positionVBO.emplace_back(vecToPushBackinPositionVBO);
                     square_index[2 * deltax + deltay] = index;
                     index++;
@@ -148,54 +144,36 @@ void Piece::generateVAOFromMatrix () {
     _vao.setIBO(IBO);
 
 }
-void Piece::displayCoordinates2(){
-  displayCoordinates2(_squarePositions);
-}
-
-void Piece::displayCoordinates2(std::vector<glm::vec2> vector)
-{
-  for (auto & o : vector) {
-    std::cout << "(" << o[0] << ", " << o[1] << ")" << std::endl;
-  }
-}
-
-void displayCoordinates4(std::vector<glm::vec4> vector)
-{
-  for (auto & o : vector) {
-    std::cout << "(" << o[0] << ", " << o[1] << ", " << o[2] << ", " << o[3] << ")" << std::endl;
-  }
-}
 
 void Piece::changeSquarePosition() {
-  std::vector<glm::vec4> homCoord = matrixTransformation(coordinateToHomogeneV(_squareOriginsPositions));
-  _squarePositions = homogeneToCoordinateV(homCoord);
+    std::vector<glm::vec4> homCoord = matrixTransformation(coordinateToHomogeneV(_squareOriginsPositions));
+    _squarePositions = homogeneToCoordinateV(homCoord);
 }
 
-void Piece::changeSquarePositionAfterRotation()
-{
-  std::vector<glm::vec2> newSquarePositions;
-  for (auto & square : _squarePositions) {
-    glm::vec2 tmp(square);
-    if (_angle == 90){
-      tmp[1] = tmp[1] + 2 * _scale;
+void Piece::changeSquarePositionAfterRotation() {
+    std::vector<glm::vec2> newSquarePositions;
+    for (auto &square : _squarePositions) {
+        glm::vec2 tmp(square);
+        if (_angle == 90) {
+            tmp[1] = tmp[1] + 2 * _scale;
+        }
+        if (_angle == 180) {
+            tmp[0] = tmp[0] - 2 * _scale;
+            tmp[1] = tmp[1] + 2 * _scale;
+        }
+        if (_angle == 270) {
+            tmp[0] = tmp[0] - 2 * _scale;
+        }
+        newSquarePositions.push_back(tmp);
     }
-    if (_angle == 180){
-      tmp[0] = tmp[0] - 2 * _scale;
-      tmp[1] = tmp[1] + 2 * _scale;
-    }
-    if (_angle == 270){
-      tmp[0] = tmp[0] - 2 * _scale;
-    }
-    newSquarePositions.push_back(tmp);
-  }
-  _squarePositions = newSquarePositions;
+    _squarePositions = newSquarePositions;
 }
 
-std::vector<glm::vec4> Piece::matrixTransformation(std::vector<glm::vec4> vect) {
-  std::vector<glm::vec4> res;
-  for (auto &i : vect) {
-    glm::vec4 tmp = _model * i;
-    res.push_back(tmp);
-  }
-  return res;
+std::vector<glm::vec4> Piece::matrixTransformation(const std::vector<glm::vec4> &vect) {
+    std::vector<glm::vec4> res;
+    for (auto &i : vect) {
+        glm::vec4 tmp = _model * i;
+        res.push_back(tmp);
+    }
+    return res;
 }
