@@ -1,56 +1,46 @@
-# glitter : GL iterative tutorial tasks on efficient rendering.
-This is an OpenGL Lab for students in the computer science department at
-ENSICAEN, an engineering scool in Caen, Normandy, France. They can of course,
-be used by any other students willing to learn OpenGL (although better
-tutorials probably exist elsewhere). The labs are associated with 3 lectures
-introducing to the basics of OpenGL. The slides are available here:
-* [Lecture 1](http://www.ecole.ensicaen.fr/~simonl/files/OpenGL/Cours/Lesson1)
-* [Lecture 2](http://www.ecole.ensicaen.fr/~simonl/files/OpenGL/Cours/Lesson2)
-* [Lecture 3](http://www.ecole.ensicaen.fr/~simonl/files/OpenGL/Cours/Lesson3)
-
-# Documentation
-The list of tutorials is described in detail in the [web site](https://drlsimon.github.io/glitter/).
-The doxygen documentation is available [here](http://www.ecole.ensicaen.fr/~simonl/files/OpenGL/glitter-doc/annotated.html).
-
-# Requirements
-The project relies on the following dependencies
-* Cmake 2.8
-* OpenGL 4.1
-* GLFW 3.0
-* GLM 0.9.2
-* [tinyobjloader](https://github.com/syoyo/tinyobjloader)
-* [stb](https://github.com/nothings/stb)
-* [termcolor](https://github.com/ikalnitsky/termcolor)
-
-**Note:** Missing dependencies will be automatically added as git submodules.
-
-
+Puzzle Game - OpenGL
+===================
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Instructions
-## Building
+## Requirements
+* Cmake 2.8
+* OpenGL 3.2
+* GLFW 3.0
+## Build
+The program can be compiled by running
 ```bash
+cd path-to-project
 mkdir build
 cd build
-cmake .. -DCMAKE_BUILD_TYPE=RELEASE
-make -j4
+cmake .. -DCMAKE_BUILD_TYPE=Release
+make -j 4
 ```
-
-## Running
-All the labs, must be launched without any optional argument, from the build root (otherwise the assets/shaders will not be found). For example,
-```bash
-# running glitter help
-./glitter help
-# getting help on pa1
-./glitter help pa1
-# running pa1 part 1
-./glitter pa1 1
-````
-
-
-# Author and License
+## Run
+The program can be executed without any optional argument, as `./puzzle`.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Game overview
+## Description
+The aim is to solve a 2D puzzle with a shape to reproduce and a set of pieces.
+## Gameplay
+The player has a geometrical shape to reproduce by using a set of pieces that will be given and that they will have
+to assemble correctly
+## Controls
+* ZQSD/WASD or Directional Arrows: move current piece
+* A/Q, E or RIGHT_SHIFT, 1 (Numeric keypad): rotate current piece
+* O, P: change current piece
+## Demo
+![Demo](etc/demo.gif "Demo of the puzzle game")
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Team
+* Raphaël ANCETTE <raphael.ancette@ecole.ensicaen.fr>
+* Camille GUIGNOL <camille.guignol@ecole.ensicaen.fr>
+* Nathan MICHEL <nathan.michel@ecole.ensicaen.fr>
+* Arnaud RIO <arnaud.rio@ecole.ensicaen.fr>
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# License
 The code is published under the MIT License (MIT)
 
 Copyright (c) 2018 Loic Simon
-Copyright (c) 2018 Sebastien Fourey
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -69,3 +59,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
